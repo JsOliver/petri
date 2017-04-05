@@ -76,6 +76,61 @@ class Cadastro_Model extends CI_Model
         endif;
 
     }
+
+    public function login($type, $email, $pass, $idfacebook){
+
+        //Login Pelo Sistema do Site
+
+        if($type == 1):
+
+        if (strlen($email) < 1 or empty($email) or strlen($pass) < 1 or empty($pass) ):
+
+        return 'Todos os Campos Deve ser Preenchidos';
+
+        else:
+            $this->db->from('users');
+            $this->db->where('email', $email);
+            $get = $this->db->get();
+            $count = $get->num_rows();
+            $result = $get->result_array();
+            if ($count > 0):
+                $this->db->from('users');
+                $this->db->where('email', $email);
+                $this->db->where('pass',  hash('whirlpool',md5(sha1($pass))));
+                $get = $this->db->get();
+                $count = $get->num_rows();
+                $result = $get->result_array();
+
+                if ($count > 0):
+
+                        $_SESSION['Auth01'] = true;
+                        $_SESSION['NAME'] = $result[0]['firstname'].' '.$result[0]['lastname'];
+                        $_SESSION['EMAIL'] = $email;
+                        $_SESSION['PASS'] = hash('whirlpool',md5(sha1($pass)));
+                        $_SESSION['ID'] = $result[0]['id'];
+
+                    return 11;
+                    else:
+
+                        return 'Senha Incorreta';
+
+                endif;
+
+            else:
+
+            return 'Email não Cadastrado';
+
+            endif;
+        endif;
+
+            endif;
+        //Login Pelo Facebook
+
+
+
+    }
+
+
 }
 
 ?>

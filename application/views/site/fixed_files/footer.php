@@ -56,35 +56,55 @@
     </div>
 </footer><!--Footer Close-->
 
-<!--Javascript (jQuery) Libraries and Plugins-->
-<script src="<?php echo base_url('assets/');?>js/libs/jquery-1.11.1.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/libs/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/libs/jquery.easing.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/bootstrap.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/smoothscroll.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/jquery.validate.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/icheck.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/jquery.placeholder.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/jquery.stellar.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/jquery.touchSwipe.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/jquery.shuffle.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/lightGallery.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/owl.carousel.min.js"></script>
-<script src="<?php echo base_url('assets/');?>js/plugins/masterslider.min.js"></script>
-<script src="<?php echo base_url('assets/');?>mailer/mailer.js"></script>
-<script src="<?php echo base_url('assets/');?>js/scripts.js"></script>
-<script src="<?php echo base_url('assets/');?>color-switcher/color-switcher.js"></script>
+<?php
 
-<!--Google Remarketing Tag (Placed before </body>)-->
-<script type="text/javascript">
-    /* <![CDATA[ */
-    var google_conversion_id = 966923546;
-    var google_custom_params = window.google_tag_params;
-    var google_remarketing_only = true;
-    /* ]]> */
-</script>
-<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
-</script>
+echo $js;
+?>
+
+<?php
+if($logado == true):
+?>
+
+    <script>
+
+        function carregando(){
+
+            var dado = '<div style="background:#f7f7f7;position: fixed;z-index: 10000000000000000;border:2px solid #5d5d5d;top: 50%;left: 42%;padding: 1%;float: left;"><h2 style="padding:0;margin:0;float: left; "><img style="float:left;" src="assets/img/loader.gif">&nbsp; Carregando...</h2></div>';
+
+            return dado;
+
+        }
+        function logout() {
+
+            $.ajax({
+                type: "POST",
+                url: "Ajax/logout",
+                beforeSend: function(){ $('.content-loading').html(carregando()); },
+                error: function(data){
+
+                    $('.content-loading').html('');
+                    alert('erro');
+                },
+                success: function( data )
+                {
+                    if(data == 11){
+                        $('.content-loading').html('');
+
+                        window.location.reload();
+
+                    }else{
+                        $('.content-loading').html('');
+
+                        $("#errorlog").html(data);
+                    }
+                }
+            });
+
+        }
+
+    </script>
+
+<?php endif;?>
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/966923546/?value=0&amp;guid=ON&amp;script=0"/>

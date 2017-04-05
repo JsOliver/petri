@@ -6,7 +6,7 @@
 
 /*Document Ready*////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function(e) {
-	
+
 	/*Global Variables
 	*******************************************/
   var $searchBtn = $('.search-btn');
@@ -47,7 +47,7 @@ $(document).ready(function(e) {
 	var $promoLabels = $('.promo-labels div');
 	var $panelToggle = $('.panel-toggle');
 	var $accordionToggle = $('.accordion .panel-heading a');
-	
+
 	/*Search Form Toggle
 	*******************************************/
 	$searchBtn.click(function(){
@@ -59,38 +59,179 @@ $(document).ready(function(e) {
 	$('.page-content, .subscr-widget, footer').click(function(){
 		$searchForm.removeClass('open').addClass('closed');
 	});
-	
+
+
+
+	function carregando(){
+
+		var dado = '<div style="background:#f7f7f7;position: fixed;z-index: 10000000000000000;border:2px solid #5d5d5d;top: 50%;left: 42%;padding: 1%;float: left;"><h2 style="padding:0;margin:0;float: left; "><img style="float:left;" src="assets/img/loader.gif">&nbsp; Carregando...</h2></div>';
+
+	return dado;
+
+	}
+
 	/*Login Forms
 	*******************************************/
-	$loginForm.validate();
 	$loginForm2.validate();
 	$loginForm3.validate();
 	$('#log-password').focus(function(){
 		$(this).attr('type', 'password');
 	});
-	
-	/*Registration Form Validation
+
+	/*Login Form Validation
 	*******************************************/
-	$('#registr-form').validate({
+	$('#login-forms').validate({
 		rules: {
-			email: { required: true, email: true },
-			senha: { required: true, minlength: 6}
+			emaill: { required: true, email: true },
+			senhal: { required: true, minlength: 6}
 		},
 		messages: {
-			email: { required: 'Informe o seu email', email: 'Ops, informe um email válido' },
-			senha: { required: 'Prencha esse campo', minlength: 'No mínimo 6 caracteres' }
+			emaill: { required: 'Informe o seu email', email: 'Ops, informe um email válido' },
+			senhal: { required: 'Prencha esse campo', minlength: 'No mínimo 6 caracteres' }
+
 
 		},
 		submitHandler: function( form ){
 			var dados = $( form ).serialize();
 
-			alert('ok');
+			$.ajax({
+				type: "POST",
+				url: "Ajax/login",
+				data: dados,
+				beforeSend: function(){ $('.content-loading').html(carregando()); },
+				error: function(data){
+
+					$('.content-loading').html('');
+					alert('erro');
+				},
+				success: function( data )
+				{
+
+					if(data == 11){
+						$('.content-loading').html('');
+						window.location.reload();
+
+
+					}else{
+						$('.content-loading').html('');
+
+						$("#errorlog").html(data);
+					}
+				}
+			});
+
+
 
 			return false;
 
 		}
 	});
-	
+
+$('#login-forms2').validate({
+		rules: {
+			emaills: { required: true, email: true },
+			senhals: { required: true, minlength: 6}
+		},
+		messages: {
+			emaills: { required: 'Informe o seu email', email: 'Ops, informe um email válido' },
+			senhals: { required: 'Prencha esse campo', minlength: 'No mínimo 6 caracteres' }
+
+
+		},
+		submitHandler: function( form ){
+			var dados = $( form ).serialize();
+
+			$.ajax({
+				type: "POST",
+				url: "Ajax/login",
+				data: dados,
+				beforeSend: function(){ $('.content-loading').html(carregando()); },
+				error: function(data){
+
+					$('.content-loading').html('');
+					alert('erro');
+				},
+				success: function( data )
+				{
+
+
+					if(data == 11){
+						$('.content-loading').html('');
+						window.location.reload();
+
+
+					}else{
+						$('.content-loading').html('');
+
+						$("#errorlog").html(data);
+					}
+				}
+			});
+
+
+
+			return false;
+
+		}
+	});
+
+
+
+	/*Registration Form Validation
+*******************************************/
+	$('#registr-form').validate({
+		rules: {
+			nome: { required: true,  minlength: 2},
+			agread: { required: true},
+			sobrenome: { required: true,  minlength: 2},
+			email: { required: true, email: true },
+			senha: { required: true, minlength: 6}
+		},
+		messages: {
+			nome: { required: 'Prencha esse campo', minlength: 'No mínimo 2 caracteres' },
+			agread: { required: 'Concorde com os Termos e Condições do Site.' },
+			sobrenome: { required: 'Prencha esse campo', minlength: 'No mínimo 2 caracteres' },
+			email: { required: 'Informe o seu email', email: 'Ops, informe um email válido' },
+			senha: { required: 'Prencha esse campo', minlength: 'No mínimo 6 caracteres' }
+
+
+		},
+		submitHandler: function( form ){
+			var dados = $( form ).serialize();
+
+			$.ajax({
+				type: "POST",
+				url: "Ajax/cadastro",
+				data: dados,
+				beforeSend: function(){ $('.content-loading').html(carregando()); },
+				error: function(data){
+
+					$('.content-loading').html('');
+					alert('erro');
+				},
+				success: function( data )
+				{
+
+					if(data == 11){
+						$('.content-loading').html('');
+
+						window.location.reload();
+
+					}else{
+						$('.content-loading').html('');
+
+						$("#errorlog").html(data);
+					}
+				}
+			});
+
+
+
+			return false;
+
+		}
+	});
+
 	/*Checkout Form Validation
 	*******************************************/
 	$checkoutForm.validate({
@@ -103,9 +244,9 @@ $(document).ready(function(e) {
 				required: true,
 				number: true
 			}
-		}	
+		}
 	});
-	
+
 	/*Order Tracking Form Validation
 	*******************************************/
 	$orderTrackForm.validate({
@@ -118,29 +259,28 @@ $(document).ready(function(e) {
 				required: true,
 				email: true
 			}
-		}	
+		}
 	});
-	
+
 	/*Account Personal Info Form
 	*******************************************/
 	$personalInfo.validate({
 		rules: {
 			api_phone: {
 				required: true,
-				number: true
 			},
 			api_email: {
 				required: true,
 				email: true
 			}
-		}	
+		}
 	});
-	
+
 	/*Adding Placeholder Support in Older Browsers
 	************************************************/
 	$('input, textarea').placeholder();
-		
-	/*Shopping Cart Dropdown 
+
+	/*Shopping Cart Dropdown
 	*******************************************/
 	//Deleting Items
 	$(document).on('click', '.cart-dropdown .delete', function(){
@@ -157,7 +297,7 @@ $(document).ready(function(e) {
 			});
 		});
 	});
-	
+
 	/*Shopping Cart Page
 	*******************************************/
 	//Deleting Items
@@ -173,7 +313,7 @@ $(document).ready(function(e) {
 			});
 		});
 	});
-	
+
 	/*Wishlist Deleting Items
 	*******************************************/
 	$(document).on('click', '.wishlist .delete i', function(){
@@ -187,7 +327,7 @@ $(document).ready(function(e) {
 			});
 		});
 	});
-	
+
 	/*Catalog 3-rd Level Submenu positioning
 	*******************************************/
 	$('.catalog .submenu .has-submenu').hover(function(){
@@ -199,7 +339,7 @@ $(document).ready(function(e) {
 		$(this).find('.sub-submenu').hide();
 		$('.catalog .submenu .offer .col-1 p').show();
 	});
-	
+
 	/*Small Header slide down on scroll
 	*******************************************/
 	if($(window).width() >= 500){
@@ -214,7 +354,7 @@ $(document).ready(function(e) {
 				} else {
 					$header.removeClass('stuck');
 				}
-		});	
+		});
 	}
 
 	/*Mobile Navigation
@@ -223,14 +363,14 @@ $(document).ready(function(e) {
 	$menuToggle.click(function(){
 		$menu.toggleClass('expanded');
 	});
-	
+
 	//Submenu Toggle
 	$submenuToggle.click(function(e){
 		$(this).toggleClass('open');
 		$(this).parent().parent().find('.submenu').toggleClass('open');
 		e.preventDefault();
 	});
-	
+
 	/*Subscription Form Widget
 	*******************************************/
 	$subscrForm.validate();
@@ -243,27 +383,27 @@ $(document).ready(function(e) {
 			}
 		e.preventDefault();
 	});
-	
+
 	/*Custom Style Checkboxes and Radios
 	*******************************************/
 	$('input').iCheck({
     checkboxClass: 'icheckbox',
     radioClass: 'iradio'
   });
-	
+
 	/*Parallax Backgrounds
 	*******************************************/
 	$(window).on('load', function(){
 		/*Checking if it's touch device we disable parallax feature due to inconsistency*/
-		if (Modernizr.touch) { 
-			$('body').removeClass('parallax'); 
+		if (Modernizr.touch) {
+			$('body').removeClass('parallax');
 		}
 		$('.parallax').stellar({
 			horizontalScrolling: false,
 			responsive:true
 		});
 	});
-	
+
 	/*Features Tabs
 	*******************************************/
 	$featureTab.on('mouseover', function(){
@@ -273,28 +413,28 @@ $(document).ready(function(e) {
 		$featureTabPane.removeClass('current');
 		$('.feature-tabs .tabs-pane' + $curTab).addClass('current');
 	});
-	
-	/*Enable Touch / swipe events for carousel 
+
+	/*Enable Touch / swipe events for carousel
 	*******************************************/
 	$(".carousel-inner").swipe( {
 		//Generic swipe handler for all directions
 		swipeRight:function(event, direction, distance, duration, fingerCount) {
-			$(this).parent().carousel('prev'); 
+			$(this).parent().carousel('prev');
 		},
 		swipeLeft: function() {
-			$(this).parent().carousel('next'); 
+			$(this).parent().carousel('next');
 		},
 		//Default is 75px, set to 0 for demo so any distance triggers swipe
 		threshold:0
 	});
-	
+
 	/*Initializing Gallery Plugin
 	*******************************************/
 	gallery.init();
 	$('.gallery-grid').lightGallery({
 		speed: 400
 	});
-	
+
 	/*Initializing Brands Carousel Plugin
 	*******************************************/
 	$brandCarousel.owlCarousel({
@@ -314,7 +454,7 @@ $(document).ready(function(e) {
 		theme: "",
 		navigationText : ["",""]
 	});
-	
+
 	/*Hero Slider
 	*******************************************/
 	if($('#hero-slider').length > 0) {
@@ -334,7 +474,7 @@ $(document).ready(function(e) {
 				instantStartLayers: true
 		});
 	}
-	
+
 	/*Hero Fullscreen Slider
 	*******************************************/
 	if($('#fullscreen-slider').length > 0) {
@@ -355,7 +495,7 @@ $(document).ready(function(e) {
 				instantStartLayers: true
 		});
 	}
-	
+
 	/*Category Slider
 	*******************************************/
 	if($('#cat-slider').length > 0) {
@@ -372,14 +512,14 @@ $(document).ready(function(e) {
 				instantStartLayers: true
 		});
 	}
-	
+
 	/*Offers Tabs
 	*******************************************/
 	$offersTabs.click(function(){
 		$offersTabs.removeClass('active');
 		$(this).addClass('active');
 	});
-	
+
 	$offersTabsCarousel.owlCarousel({
 		itemsCustom : [
 			[0, 1],
@@ -390,20 +530,20 @@ $(document).ready(function(e) {
 		navigation : false,
 		theme: ""
 	});
-	
+
 	/*Catalog Sorting Toggles
 	*******************************************/
 	$sortToggle.click(function(e){
 		$(this).toggleClass('sorted');
 		e.preventDefault();
 	});
-	
+
 	/*Disabling link on active page
 	*******************************************/
 	$activePage.click(function(e){
 		e.preventDefault();
 	});
-	
+
 	/*Catalog Filters
 	*******************************************/
 	//Price Slider Range
@@ -439,40 +579,40 @@ $(document).ready(function(e) {
 			}
 		});
 	}
-	
+
 	//Clear price filters
 	$('#clearPrice').click(function(){
 		$('#price-range').val([$startMin, $startMax], { set: true });
 	});
-	
+
 	//Clear Checkbox filters
 	$('.clearChecks').click(function(){
 		$(this).parent().find('.icheckbox').removeClass('checked');
 	});
-	
+
 	//Categories accordion
 	$subcatToggle.click(function(e){
 		$(this).parent().toggleClass('opened');
 		$(this).parent().find('.subcategory').toggleClass('open');
 		e.preventDefault();
 	});
-	
+
 	//Filter Toggle / Showing Filters in Modal
 	$filterToggle.click(function(){
 		$('.shop-filters').appendTo($('#filterModal .modal-body'));
 		$('#filterModal .modal-body .shop-filters').css('display', 'block');
 	});
-	
+
 	$('#filterModal').on('hide.bs.modal', function(){
 		$('.shop-filters').appendTo('.filters-mobile');
 	});
-	
+
 	$(window).resize(function(){
 		if($(window).width() > 768){
 			$('#filterModal').modal('hide');
 		}
 	});
-	
+
 	/*Catalog Single
 	*******************************************/
 	//Product Gallery
@@ -488,7 +628,7 @@ $(document).ready(function(e) {
 				view:'fade'
 		});
 	}
-	
+
 	//Add(+/-) Button Number Incrementers
 	$(".incr-btn").on("click", function(e) {
 		var $button = $(this);
@@ -506,7 +646,7 @@ $(document).ready(function(e) {
 		$button.parent().find("input").val(newVal);
 		e.preventDefault();
 	});
-	
+
 	/*Added To Cart Message + Action (For Demo Purpose)
 	**************************************************/
 	$addToCartBtn.click(function(){
@@ -517,21 +657,21 @@ $(document).ready(function(e) {
 		var $cartTotalItems = parseInt($('.cart-btn a span').text()) +1;
 		$addedToCartMessage.find('p').text('"' + $itemName + '"' + '  ' + 'was successfully added to your cart.');
 		$('.cart-dropdown table').append(
-			'<tr class="item"><td><div class="delete"></div><a href="#">' + $itemName + 
+			'<tr class="item"><td><div class="delete"></div><a href="#">' + $itemName +
 			'<td><input type="text" value="' + $itemQnty +
-			'"></td><td class="price">' + $itemPrice + '</td>' 
+			'"></td><td class="price">' + $itemPrice + '</td>'
 		);
 		$('.cart-btn a span').text($cartTotalItems);
 		$addedToCartMessage.addClass('visible');
 	});
-	
+
 	/*Promo Labels Popovers
 	*******************************************/
 	$promoLabels.popover({
 		placement: 'top',
 		trigger: 'hover'
 	});
-	
+
 	/*Special Offer Autoheight
 	*******************************************/
 	$(window).load(function(){
@@ -542,7 +682,7 @@ $(document).ready(function(e) {
 		var tileH = $('.special-offer .tile').height();
 		$('.special-offer .offer').css('height', tileH);
 	});
-	
+
 	/*Expandable Panels
 	*******************************************/
 	$panelToggle.click(function(e){
@@ -551,14 +691,14 @@ $(document).ready(function(e) {
 		$($target).toggleClass('expanded');
 		e.preventDefault();
 	});
-	
+
 	/*Accordion Widget
 	*******************************************/
 	$accordionToggle.click(function(){
 		$accordionToggle.parent().removeClass('active');
 		$(this).parent().addClass('active');
 	});
-	
+
 	/*Sticky Buttons
 	*******************************************/
 	//Scroll to Top Button
@@ -572,7 +712,7 @@ $(document).ready(function(e) {
 	$scrollTopBtn.click(function(){
 		$('html, body').animate({scrollTop : 0}, {duration: 700, easing:"easeOutExpo"});
 	});
-	
+
 	//Quick Contact Form
 	$qcfBtn.click(function(){
 		$(this).toggleClass('active');
@@ -582,7 +722,7 @@ $(document).ready(function(e) {
 		$qcfBtn.removeClass('active');
 		$('.quick-contact').removeClass('visible');
 	});
-	
+
 
 });/*Document Ready End*//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -668,6 +808,6 @@ var gallery = (function( $ ) {
 	return {
 		init: init
 	};
-}( jQuery ));	
-	
+}( jQuery ));
+
 /************************************************************************/

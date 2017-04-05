@@ -1,98 +1,86 @@
 <!doctype html>
 <html>
 <head>
+
     <meta charset="utf-8">
-    <title>Bushido - HTML5 E-Commerce Template</title>
+    <title><?php
+        echo $meta_title;
+        ?></title>
     <!--SEO Meta Tags-->
-    <meta name="description" content="Responsive HTML5 E-Commerce Template" />
-    <meta name="keywords" content="responsive html5 template, e-commerce, shop, bootstrap 3.0, css, jquery, flat, modern" />
-    <meta name="author" content="8Guild" />
+    <meta name="description" content="Responsive HTML5 E-Commerce Template"/>
+    <meta name="keywords"
+          content="responsive html5 template, e-commerce, shop, bootstrap 3.0, css, jquery, flat, modern"/>
+    <meta name="author" content="8Guild"/>
     <!--Mobile Specific Meta Tag-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <!--Favicon-->
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-    <link rel="icon" href="<?php echo base_url('assets/');?>favicon.ico" type="image/x-icon">
-    <!--Master Slider Styles-->
-    <link href="<?php echo base_url('assets/');?>masterslider/style/masterslider.css" rel="stylesheet" media="screen">
-    <!--Styles-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-    <link href="<?php echo base_url('assets/');?>css/styles.css" rel="stylesheet" media="screen">
-    <!--Color Scheme-->
-    <link class="color-scheme" href="<?php echo base_url('assets/');?>css/colors/color-scheme2.css" rel="stylesheet" media="screen">
-    <!--Color Switcher-->
-    <!--Modernizr-->
-    <script src="<?php echo base_url('assets/');?>js/libs/modernizr.custom.js"></script>
-    <!--Adding Media Queries Support for IE8-->
-    <!--[if lt IE 9]>
-    <script src="<?php echo base_url('assets/');?>js/plugins/respond.js"></script>
-    <![endif]-->
-    <!--Google Analytics-->
-    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-46803427-2']);
-        _gaq.push(['_trackPageview']);
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+    <?php
 
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
+    echo $css;
+    echo $js_externo;
+
+    ?>
 </head>
 
 <!--Body-->
 <body>
 
+<?php
 
-<!--Login Modal-->
-<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-times"></i></button>
-                <h2>Login or <a href="register.html">Register</a></h2>
-                <p class="large">Use social accounts</p>
-                <div class="social-login">
-                    <a class="facebook" href="#"><i class="fa fa-facebook-square"></i></a>
-                    <a class="google" href="#"><i class="fa fa-google-plus-square"></i></a>
-                    <a class="twitter" href="#"><i class="fa fa-twitter-square"></i></a>
+if ($logado == false):
+    ?>
+    <!--Login Modal-->
+    <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i
+                            class="fa fa-times"></i></button>
+                    <h2>Entre ou <a href="<?php echo base_url('entrar'); ?>">Cadastre-se</a></h2>
+                    <!--<p class="large">Use social accounts</p>
+                    <div class="social-login">
+                        <a class="facebook" href="#"><i class="fa fa-facebook-square"></i></a>
+                        <a class="google" href="#"><i class="fa fa-google-plus-square"></i></a>
+                        <a class="twitter" href="#"><i class="fa fa-twitter-square"></i></a>
+                    </div>-->
                 </div>
-            </div>
-            <div class="modal-body">
-                <form class="login-form">
-                    <div class="form-group group">
-                        <label for="log-email">Email</label>
-                        <input type="email" class="form-control" name="log-email" id="log-email" placeholder="Enter your email" required>
-                        <a class="help-link" href="#">Forgot email?</a>
-                    </div>
-                    <div class="form-group group">
-                        <label for="log-password">Password</label>
-                        <input type="text" class="form-control" name="log-password" id="log-password" placeholder="Enter your password" required>
-                        <a class="help-link" href="#">Forgot password?</a>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="remember"> Remember me</label>
-                    </div>
-                    <input class="btn btn-success" type="submit" value="Login">
-                </form>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+                <div class="modal-body">
+                    <form method="post" action="<?php echo base_url('LoginForm'); ?>" id="login-forms">
+                        <div class="form-group group">
+                            <label for="log-email">Email</label>
+                            <input type="email" class="form-control" name="emaill" id="log-email"
+                                   placeholder="Entre com Seu E-mail" required>
+                            <!-- <a class="help-link" href="#">Forgot email?</a>-->
+                        </div>
+                        <div class="form-group group">
+                            <label for="log-password">Senha</label>
+                            <input type="text" class="form-control" name="senhal" id="log-password"
+                                   placeholder="Entre com sua Senha" required>
+                            <a class="help-link" href="#">Esqueceu a Senha?</a>
+                        </div>
+                        <input type="hidden" name="typeLog" value="1">
 
+                        <!--  <div class="checkbox">
+                              <label><input type="checkbox" name="remember"> Lembre-me</label>
+                          </div>-->
+                        <input class="btn btn-success" type="submit" value="Login">
+                    </form>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+<?php endif; ?>
 <!--Header-->
-<header data-offset-top="500" data-stuck="600"><!--data-offset-top is when header converts to small variant and data-stuck when it becomes visible. Values in px represent position of scroll from top. Make sure there is at least 100px between those two values for smooth animation-->
+<header data-offset-top="500" data-stuck="600">
+    <!--data-offset-top is when header converts to small variant and data-stuck when it becomes visible. Values in px represent position of scroll from top. Make sure there is at least 100px between those two values for smooth animation-->
 
     <!--Search Form-->
     <form class="search-form closed" method="get" role="form" autocomplete="off">
         <div class="container">
             <div class="close-search"><i class="icon-delete"></i></div>
             <div class="form-group">
-                <label class="sr-only" for="search-hd">Search for procuct</label>
-                <input type="text" class="form-control" name="search-hd" id="search-hd" placeholder="Search for procuct">
+                <label class="sr-only" for="search-hd">Buscar Leilão </label>
+                <input type="text" class="form-control" name="search-hd" id="search-hd" placeholder="Buscar Leilão">
                 <button type="submit"><i class="icon-magnifier"></i></button>
             </div>
         </div>
@@ -103,7 +91,8 @@
     <div class="right-bg"></div>
 
     <div class="container">
-        <a class="logo" href="<?php echo base_url('');?>"><img src="<?php echo base_url('assets/');?>img/logo.png" alt="Bushido"/></a>
+        <a class="logo" href="<?php echo base_url(''); ?>"><img src="<?php echo base_url('assets/'); ?>img/logo.png"
+                                                                alt="Bushido"/></a>
 
         <!--
         <ul class="switchers">
@@ -129,104 +118,176 @@
         <!--Main Menu-->
         <nav class="menu">
             <ul class="main">
-                <li class="has-submenu"><a href="index.html">Home<i class="fa fa-chevron-down"></i></a><!--Class "has-submenu" for proper highlighting and dropdown-->
-                    <ul class="submenu">
-                        <li><a href="index.html">Home - Slideshow</a></li>
-                        <li><a href="home-fullscreen.html">Home - Fullscreen Slider</a></li>
-                        <li><a href="home-showcase.html">Home - Product Showcase</a></li>
-                        <li><a href="home-categories.html">Home - Categories Slider</a></li>
-                        <li><a href="home-offers.html">Home - Special Offers</a></li>
-                    </ul>
+                <li class="has-submenu"><a href="index.html">Home<i class="fa fa-chevron-down"></i></a>
+                    <!--Class "has-submenu" for proper highlighting and dropdown-->
                 </li>
-                <li class="has-submenu"><a href="shop-filters-left-3cols.html">Shop<i class="fa fa-chevron-down"></i></a>
-                    <ul class="submenu">
-                        <li><a href="shop-filters-left-3cols.html">Shop - Filters Left 3 Cols</a></li>
-                        <li><a href="shop-filters-left-2cols.html">Shop - Filters Left 2 Cols</a></li>
-                        <li><a href="shop-filters-right-3cols.html">Shop - Filters Right 3 Cols</a></li>
-                        <li><a href="shop-filters-right-2cols.html">Shop - Filters Right 2 Cols</a></li>
-                        <li><a href="shop-no-filters-4cols.html">Shop - No Filters 4 Cols</a></li>
-                        <li><a href="shop-no-filters-3cols.html">Shop - No Filters 3 Cols</a></li>
-                        <li><a href="shop-single-item-v1.html">Shop - Single Item Vers 1</a></li>
-                        <li><a href="shop-single-item-v2.html">Shop - Single Item Vers 2</a></li>
-                        <li><a href="shopping-cart.html">Shopping Cart</a></li>
-                        <li><a href="checkout.html">Checkout Page</a></li>
-                        <li><a href="wishlist.html">Wishlist</a></li>
-                    </ul>
+                <li class="has-submenu"><a href="<?php echo base_url('leiloes-abertos') ?>">Leilões Abertos<i
+                            class="fa fa-chevron-down"></i></a>
+
+                    <?php
+
+                    $dropdown_limit = 10;
+
+                    $this->db->from('leiloes');
+                    $get = $this->db->where('status', '1');
+                    $get = $this->db->or_where('status', '4');
+                    $get = $this->db->get();
+                    $count = $get->num_rows();
+
+                    if ($count > 0):
+                        ?>
+                        <ul class="submenu">
+                            <?php
+                            $this->db->from('leiloes');
+                            $get = $this->db->where('status', '1');
+                            $get = $this->db->or_where('status', '4');
+                            $get = $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc');
+                            $get = $this->db->limit($dropdown_limit, 0);
+                            $get = $this->db->get();
+                            $count = $get->num_rows();
+                            $result = $get->result_array();
+
+                            foreach ($result as $value) {
+                                ?>
+                                <li>
+                                    <a href="<?php echo base_url('leilao/') . str_replace(' ', '-', strtolower($value['loja'])) . '/' . $value['id_leilao']; ?>"><?php echo $value['nome']; ?></a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    <?php endif; ?>
                 </li>
-                <li class="has-submenu"><a href="blog-sidebar-right.html">Blog<i class="fa fa-chevron-down"></i></a>
-                    <ul class="submenu">
-                        <li><a href="blog-sidebar-left.html">Blog - Sidebar Left</a></li>
-                        <li><a href="blog-sidebar-right.html">Blog - Sidebar Right</a></li>
-                        <li><a href="blog-single.html">Blog - Single Post</a></li>
-                    </ul>
+                <li class="has-submenu"><a href="<?php echo base_url('leiloes-finalizados') ?>">Leilões Finalizados<i
+                            class="fa fa-chevron-down"></i></a>
+
+                    <?php
+
+
+                    $this->db->from('leiloes');
+                    $get = $this->db->where('status', '3');
+                    $get = $this->db->get();
+                    $count = $get->num_rows();
+
+                    if ($count > 0):
+                        ?>
+                        <ul class="submenu">
+                            <?php
+                            $this->db->from('leiloes');
+                            $get = $this->db->where('status', '1');
+                            $get = $this->db->or_where('status', '4');
+                            $get = $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc');
+                            $get = $this->db->limit($dropdown_limit, 0);
+                            $get = $this->db->get();
+                            $count = $get->num_rows();
+                            $result = $get->result_array();
+
+                            foreach ($result as $value) {
+                                ?>
+                                <li>
+                                    <a href="<?php echo base_url('leilao/') . str_replace(' ', '-', strtolower($value['loja'])) . '/' . $value['id_leilao']; ?>"><?php echo $value['nome']; ?></a>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    <?php endif; ?>
                 </li>
-                <li class="has-submenu"><a href="#">Pages<span class="label">NEW</span><i class="fa fa-chevron-down"></i></a>
-                    <ul class="submenu">
-                        <li><a href="register.html">Login / Registration</a></li>
-                        <li><a href="account-personal-info.html">Account: Personal Info<span class="label">NEW</span></a></li>
-                        <li><a href="account-addresses.html">Account: Addresses<span class="label">NEW</span></a></li>
-                        <li><a href="order-history.html">Orders History<span class="label">NEW</span></a></li>
-                        <li><a href="order-tracking.html">Order Tracking<span class="label">NEW</span></a></li>
-                        <li><a href="delivery-info.html">Delivery Info<span class="label">NEW</span></a></li>
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="contacts.html">Contacts</a></li>
-                        <li><a href="coming-soon.html">Coming Soon</a></li>
-                        <li><a href="404.html">404 Page</a></li>
-                        <li><a href="support.html">Support Page</a></li>
-                        <li><a href="cs-page.html">Components &amp; Styles</a></li>
-                    </ul>
-                </li>
-                <li class="hide-sm"><a href="support.html">Support</a></li>
+                <li class="hide-sm"><a href="<?php echo base_url('fale-conosco') ?>">Fale Conosco</a></li>
             </ul>
-            <ul class="catalog">
-                <li class="has-submenu"><a href="shop-filters-left-3cols.html">Phones<i class="fa fa-chevron-down"></i></a>
-                    <ul class="submenu">
-                        <li><a href="#">Nokia</a></li>
-                        <li class="has-submenu"><a href="#">iPhone</a><!--Class "has-submenu" for adding carret and dropdown-->
-                            <ul class="sub-submenu">
-                                <li><a href="#">iPhone 4</a></li>
-                                <li><a href="#">iPhone 4s</a></li>
-                                <li><a href="#">iPhone 5c</a></li>
-                                <li><a href="#">iPhone 5s</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">HTC</a></li>
-                        <li class="has-submenu"><a href="#">Samsung</a>
-                            <ul class="sub-submenu">
-                                <li><a href="#">Galaxy Note 3</a></li>
-                                <li><a href="#">Galaxy S5</a></li>
-                                <li><a href="#">Galaxy S3 Neo</a></li>
-                                <li><a href="#">Galaxy Gear</a></li>
-                                <li><a href="#">Galaxy S Duos 2</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="#">BlackBerry</a></li>
-                        <li class="offer">
-                            <div class="col-1">
-                                <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                            </div>
-                            <div class="col-2">
-                                <img src="<?php echo base_url('assets/');?>img/offers/menu-drodown-offer.jpg" alt="Special Offer"/>
-                                <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-                <li><a href="shop-filters-left-3cols.html">Cameras</a></li>
-                <li><a href="shop-filters-left-3cols.html">Personal computers</a></li>
-                <li><a href="shop-filters-left-3cols.html">Gaming consoles</a></li>
-                <li><a href="shop-filters-left-3cols.html">TV sets</a></li>
-            </ul>
+
+            <?php
+
+            $this->db->from('categorias');
+            $this->db->order_by('acessos', 'desc', 'id_categoria', 'desc');
+            $this->db->limit(5,0);
+            $this->db->where('status', '1');
+            $get = $this->db->get();
+            $count = $get->num_rows();
+            if ($count > 0):
+
+                ?>
+
+                <ul class="catalog">
+
+                    <?php
+
+                    $result = $get->result_array();
+                    foreach ($result as $value){
+                    ?>
+                    <li class="has-submenu"><a href="shop-filters-left-3cols.html"><?php echo $value['nome'];?><i
+                                class="fa fa-chevron-down"></i></a>
+
+                       <?php
+                       if($value['tipo'] == 1):
+                       ?>
+                        <ul class="submenu">
+                            <li><a href="#">Nokia</a></li>
+                            <li class="has-submenu"><a href="#">iPhone</a>
+                                <!--Class "has-submenu" for adding carret and dropdown-->
+                                <ul class="sub-submenu">
+                                    <li><a href="#">iPhone 4</a></li>
+                                    <li><a href="#">iPhone 4s</a></li>
+                                    <li><a href="#">iPhone 5c</a></li>
+                                    <li><a href="#">iPhone 5s</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">HTC</a></li>
+                            <li class="has-submenu"><a href="#">Samsung</a>
+                                <ul class="sub-submenu">
+                                    <li><a href="#">Galaxy Note 3</a></li>
+                                    <li><a href="#">Galaxy S5</a></li>
+                                    <li><a href="#">Galaxy S3 Neo</a></li>
+                                    <li><a href="#">Galaxy Gear</a></li>
+                                    <li><a href="#">Galaxy S Duos 2</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">BlackBerry</a></li>
+                            <li class="offer">
+                                <div class="col-1">
+                                    <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+                                        eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                </div>
+                                <div class="col-2">
+                                    <img src="<?php echo base_url('assets/'); ?>img/offers/menu-drodown-offer.jpg"
+                                         alt="Special Offer"/>
+                                    <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
+                                </div>
+                            </li>
+                        </ul>
+
+                           <?php endif;?>
+                    </li>
+                    <?php   } ?>
+                </ul>
+
+            <?php endif; ?>
         </nav>
 
         <!--Toolbar-->
-        <div class="toolbar group">
-            <button class="search-btn btn-outlined-invert"><i class="icon-magnifier"></i></button>
-            <div class="middle-btns">
-                <a class="btn-outlined-invert" href="<?php echo base_url('cadastro');?>"><i class="icon-paper-pencil"></i> <span>Cadastro</span></a>
-                <a class="login-btn btn-outlined-invert" href="#" data-toggle="modal" data-target="#loginModal"><i class="icon-profile"></i> <span>Login</span></a>
-            </div>
 
-        </div><!--Toolbar Close-->
+        <?php
+        if ($logado == true):
+            ?>
+            <div class="toolbar group">
+                <button class="search-btn btn-outlined-invert"><i class="icon-magnifier"></i></button>
+                <div class="middle-btns">
+                    <a class="btn-outlined-invert" href="<?php echo base_url('minha-conta'); ?>"><i
+                            class="icon-profile"></i> <span>Painel</span></a>
+                    <a class="login-btn btn-outlined-invert" href="javascript:logout()"><i class="icon-sinth"></i>
+                        <span>Sair</span></a>
+                </div>
+
+            </div>
+        <?php else: ?>
+            <div class="toolbar group">
+                <button class="search-btn btn-outlined-invert"><i class="icon-magnifier"></i></button>
+                <div class="middle-btns">
+                    <a class="btn-outlined-invert" href="<?php echo base_url('entrar'); ?>"><i
+                            class="icon-paper-pencil"></i> <span>Cadastro</span></a>
+                    <a class="login-btn btn-outlined-invert" href="#" data-toggle="modal" data-target="#loginModal"><i
+                            class="icon-profile"></i> <span>Entrar</span></a>
+                </div>
+
+            </div>
+        <?php endif; ?>
+        <!--Toolbar Close-->
     </div>
 </header><!--Header Close-->
+<div class="content-loading"></div>

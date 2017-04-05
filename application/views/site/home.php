@@ -57,60 +57,44 @@
             </div>
         </div>
     </section><!--Categories Close-->
+    <?php
 
+    $limit = 30;
+
+    $this->db->from('leiloes');
+    $get = $this->db->where('status','1');
+    $get = $this->db->or_where('status','4');
+    $get = $this->db->get();
+    $count = $get->num_rows();
+
+    if($count > 0):
+    ?>
     <!--Catalog Grid-->
     <section class="catalog-grid">
         <div class="container">
             <h2 class="primary-color">Principais Leilões</h2>
-            <div class="row">
+            <div class="row" id="leiloes">
+
+            <?php
+            $this->db->from('leiloes');
+            $get = $this->db->where('status','1');
+            $get = $this->db->or_where('status','4');
+            $get = $this->db->order_by('acessos','desc','id_leilao','desc');
+            $get = $this->db->limit($limit,0);
+            $get = $this->db->get();
+            $count = $get->num_rows();
+            $result = $get->result_array();
+
+            foreach ($result as $value){
+                $this->load->view('site/itens/leiloes',$value);
+            } ?>
 
 
-                <?php for($i=0;$i<=11;$i++):?>
-
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="tile">
-                        <div class="badges">
-                            <span class="sale"></span>
-                        </div>
-                        <div class="price-label">715,00 $</div>
-                        <a href="#"><img src="<?php echo base_url('assets/');?>img/catalog/1.png" alt="1"/></a>
-                        <div class="footer">
-                            <a href="#">Nikon D5300</a>
-                            <span>by Pirate3d</span>
-                            <div class="tools">
-                                <div class="rate">
-                                    <span class="active"></span>
-                                    <span class="active"></span>
-                                    <span class="active"></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                                <!--Add To Cart Button-->
-                                <a class="add-cart-btn" href="#"><span>To cart</span><i class="icon-shopping-cart"></i></a>
-                                <!--Share Button-->
-                                <div class="share-btn">
-                                    <div class="hover-state">
-                                        <a class="fa fa-facebook-square" href="#"></a>
-                                        <a class="fa fa-twitter-square" href="#"></a>
-                                        <a class="fa fa-google-plus-square" href="#"></a>
-                                    </div>
-                                    <i class="fa fa-share"></i>
-                                </div>
-                                <!--Add To Wishlist Button-->
-                                <a class="wishlist-btn" href="#">
-                                    <div class="hover-state">Wishlist</div>
-                                    <i class="fa fa-plus"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <?php endfor;?>
             </div>
         </div>
-    </section><!--Catalog Grid Close-->
+    </section>
 
+    <?php endif;?>
     <!--Tabs Widget-->
     <section class="tabs-widget">
         <!-- Nav tabs -->

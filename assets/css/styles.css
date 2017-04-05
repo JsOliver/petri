@@ -15518,3 +15518,12 @@ header .search-form .close-search:hover {
 .modal-header .close:active {
   outline: 0;
 }
+
+.boxs{
+
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  float:left;
+  z-index:1000000000000000000;
+}

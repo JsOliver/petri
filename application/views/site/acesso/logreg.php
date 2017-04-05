@@ -1,40 +1,44 @@
 <?php $this->load->view('site/fixed_files/header'); ?>
 
+
 <!--Page Content-->
 <div class="page-content">
 
     <!--Breadcrumbs-->
     <ol class="breadcrumb">
-        <li><a href="index.html">Home</a></li>
-        <li>Login/ register</li>
+        <li><a href="<?php echo base_url('');?>">Inicio</a></li>
+        <li>Entrar/ Cadastrar</li>
     </ol><!--Breadcrumbs Close-->
 
     <!--Login / Register-->
     <section class="log-reg container">
-        <h2>Login/ register</h2>
-        <p class="large">Use social accounts</p>
+        <h2>Entrar/ Cadastrar</h2>
+        <!--<p class="large">Use social accounts</p>
         <div class="social-login">
             <a class="facebook" href="#"><i class="fa fa-facebook-square"></i></a>
             <a class="google" href="#"><i class="fa fa-google-plus-square"></i></a>
             <a class="twitter" href="#"><i class="fa fa-twitter-square"></i></a>
-        </div>
+        </div>-->
         <div class="row">
             <!--Login-->
             <div class="col-lg-5 col-md-5 col-sm-5">
-                <form method="post" class="login-form">
+                <form method="post" action="<?php echo base_url('LoginForm');?>" id="login-forms2">
                     <div class="form-group group">
                         <label for="log-email2">Email</label>
-                        <input type="email" class="form-control" name="log-email2" id="log-email2" placeholder="Enter your email" required>
-                        <a class="help-link" href="#">Forgot email?</a>
+                        <input type="email" class="form-control"  name="emaills" id="log-email"  placeholder="Entre com seu E-mail" required>
+                        <a class="help-link" href="#">Esqueceu seu E-mail?</a>
                     </div>
+
                     <div class="form-group group">
-                        <label for="log-password2">Password</label>
-                        <input type="text" class="form-control" name="log-password2" id="log-password2" placeholder="Enter your password" required>
-                        <a class="help-link" href="#">Forgot password?</a>
+                        <label for="log-password2">Senha</label>
+                        <input type="password" class="form-control" name="senhals" id="log-password" placeholder="Entre com sua Senha" required>
+                        <a class="help-link" href="#">Esqueceu sua Senha?</a>
                     </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="remember"> Remember me</label>
-                    </div>
+                  <!--  <div class="checkbox">
+                        <label><input type="checkbox" name="remember"> Lembre-me</label>
+                    </div>-->
+                    <input type="hidden" name="typeLogs" value="1">
+
                     <input class="btn btn-success" type="submit" value="Login">
                 </form>
             </div>
@@ -62,7 +66,7 @@
                     </div>
 
                     <div class="checkbox">
-                        <label><input type="checkbox" name="remember"> I have read and agree with the terms</label><br>
+                        <label><input type="checkbox" name="agread" required> I have read and agree with the terms</label><br>
                         <b><?php echo $errorReport?></b>
                     </div>
                     <input class="btn btn-success" type="submit" value="Register">
