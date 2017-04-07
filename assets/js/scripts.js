@@ -64,7 +64,7 @@ $(document).ready(function(e) {
 
 	function carregando(){
 
-		var dado = '<div style="background:#f7f7f7;position: fixed;z-index: 10000000000000000;border:2px solid #5d5d5d;top: 50%;left: 42%;padding: 1%;float: left;"><h2 style="padding:0;margin:0;float: left; "><img style="float:left;" src="assets/img/loader.gif">&nbsp; Carregando...</h2></div>';
+		var dado = '<div style="background:#f7f7f7;position: fixed;z-index: 10000000000000000;border:2px solid #5d5d5d;top: 50%;left: 42%;padding: 1%;float: left;"><h2 style="padding:0;margin:0;float: left; "><img style="float:left;" src="'+DIR+'assets/img/loader.gif"><span id="texto-carregando">&nbsp; Carregando...</span></h2></div>';
 
 	return dado;
 
@@ -96,7 +96,7 @@ $(document).ready(function(e) {
 
 			$.ajax({
 				type: "POST",
-				url: "Ajax/login",
+				url: DIR+"Ajax/login",
 				data: dados,
 				beforeSend: function(){ $('.content-loading').html(carregando()); },
 				error: function(data){
@@ -106,6 +106,8 @@ $(document).ready(function(e) {
 				},
 				success: function( data )
 				{
+
+
 
 					if(data == 11){
 						$('.content-loading').html('');
@@ -143,13 +145,13 @@ $('#login-forms2').validate({
 
 			$.ajax({
 				type: "POST",
-				url: "Ajax/login",
+				url: DIR+"Ajax/login",
 				data: dados,
 				beforeSend: function(){ $('.content-loading').html(carregando()); },
 				error: function(data){
 
 					$('.content-loading').html('');
-					alert('erro');
+
 				},
 				success: function( data )
 				{
@@ -161,6 +163,7 @@ $('#login-forms2').validate({
 
 
 					}else{
+
 						$('.content-loading').html('');
 
 						$("#errorlog").html(data);
@@ -201,7 +204,7 @@ $('#login-forms2').validate({
 
 			$.ajax({
 				type: "POST",
-				url: "Ajax/cadastro",
+				url: DIR+"Ajax/cadastro",
 				data: dados,
 				beforeSend: function(){ $('.content-loading').html(carregando()); },
 				error: function(data){
@@ -809,5 +812,7 @@ var gallery = (function( $ ) {
 		init: init
 	};
 }( jQuery ));
+
+
 
 /************************************************************************/

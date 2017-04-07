@@ -10,6 +10,8 @@ class Ajax extends CI_Controller
 
         $this->load->model('sessionsverify_model');
         $this->load->model('cadastro_model');
+        $this->load->model('Functions_Model');
+
 
     }
 
@@ -148,5 +150,81 @@ class Ajax extends CI_Controller
 
     //Funções Especificas
 
+    //categorias Ajax
+
+    public function divs_categorias(){
+
+
+        $valor['tipo'] = $_POST['tipo'];
+        $valor['pag'] = $_POST['pag'];
+        $valor['banco'] = 'categorias';
+        $valor['div'] = 'explorar_categorias';
+        $valor['categoria'] = '';
+        $valor['subcategoria'] ='';
+        $valor['sub_subcategoria'] = '';
+        $this->load->view('site/itens/busca_categoria', $valor);
+
+
+    }
+
+    public function divs_leiloes(){
+
+        $explodecate = explode('?',$_POST['segment3']);
+
+        $valor['tipo'] = 2;
+        $valor['pag'] = $explodecate[0];
+        $valor['banco'] = 'leiloes';
+        $valor['div'] = 'buscar_por_categorias';
+        $valor['categoria'] = $explodecate[0];
+        $valor['subcategoria'] ='';
+        $valor['sub_subcategoria'] = '';
+        $this->load->view('site/itens/busca_categoria', $valor);
+
+
+    }
+
+    public function divs_leiloes_sub(){
+
+        $explodecate = explode('?',$_POST['segment3']);
+        $explodesubcate = explode('?',$_POST['segment4']);
+
+        $valor['tipo'] = 3;
+        $valor['pag'] = $explodecate[0];
+        $valor['banco'] = 'leiloes_sub';
+        $valor['div'] = 'buscar_por_sub_categorias';
+        $valor['categoria'] = $explodecate[0];
+        $valor['subcategoria'] = $explodesubcate[0];;
+        $valor['sub_subcategoria'] = '';
+        $this->load->view('site/itens/busca_categoria', $valor);
+
+
+    }
+    public function divs_leiloes_sub_sub(){
+
+        $explodecate = explode('?',$_POST['segment3']);
+        $explodesubcate = explode('?',$_POST['segment4']);
+        $explodesubsubcate = explode('?',$_POST['segment5']);
+
+        $valor['tipo'] = 4;
+        $valor['pag'] = $explodecate[0];
+        $valor['banco'] = 'leiloes_sub_sub';
+        $valor['div'] = 'buscar_por_sub_sub_categorias';
+        $valor['categoria'] = $explodecate[0];
+        $valor['subcategoria'] = $explodesubcate[0];;
+        $valor['sub_subcategoria'] = $explodesubsubcate[0];
+        $this->load->view('site/itens/busca_categoria', $valor);
+
+
+    }
+    public function divs_busca(){
+
+        $explodebusca = explode('=',$_POST['segment3']);
+        $valor['tipo'] = 1;
+        $valor['pag'] = $_POST['pag'];
+        $valor['busca'] = $explodebusca[0];
+        $this->load->view('site/itens/busca', $valor);
+
+
+    }
 
 }

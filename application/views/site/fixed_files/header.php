@@ -3,28 +3,30 @@
 <head>
 
     <meta charset="utf-8">
-    <title><?php
-        echo $meta_title;
-        ?></title>
+    <title><?php echo $metas['meta_title']; ?></title>
     <!--SEO Meta Tags-->
-    <meta name="description" content="Responsive HTML5 E-Commerce Template"/>
-    <meta name="keywords"
-          content="responsive html5 template, e-commerce, shop, bootstrap 3.0, css, jquery, flat, modern"/>
+    <meta name="description" content="<?php echo $metas['meta_description']; ?>"/>
+    <meta name="keywords"  content="<?php  echo $metas['meta_keywords'];  ?>"/>
     <meta name="author" content="8Guild"/>
     <!--Mobile Specific Meta Tag-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-
     <?php
-
-    echo $css;
-    echo $js_externo;
-
+    echo $cogs['css'];
+    echo $cogs['js_externo'];
     ?>
+    <style>
+        @media screen and (min-width: 480px) {
+            .texto-carregando {
+                display: none;
+            }
+        }
+    </style>
 </head>
-
 <!--Body-->
 <body>
-
+<script>
+    var DIR = '<?php echo base_url('');?>';
+    </script>
 <?php
 
 if ($logado == false):
@@ -75,12 +77,12 @@ if ($logado == false):
     <!--data-offset-top is when header converts to small variant and data-stuck when it becomes visible. Values in px represent position of scroll from top. Make sure there is at least 100px between those two values for smooth animation-->
 
     <!--Search Form-->
-    <form class="search-form closed" method="get" role="form" autocomplete="off">
+    <form class="search-form closed" method="get" role="form" action="<?php echo base_url('buscar');?>" autocomplete="off">
         <div class="container">
             <div class="close-search"><i class="icon-delete"></i></div>
             <div class="form-group">
                 <label class="sr-only" for="search-hd">Buscar Leilão </label>
-                <input type="text" class="form-control" name="search-hd" id="search-hd" placeholder="Buscar Leilão">
+                <input type="text" class="form-control" name="q" id="search-hd" placeholder="Buscar Leilão" value="<?php if(isset($_GET['q'])): echo $_GET['q']; endif;?>">
                 <button type="submit"><i class="icon-magnifier"></i></button>
             </div>
         </div>
@@ -91,7 +93,7 @@ if ($logado == false):
     <div class="right-bg"></div>
 
     <div class="container">
-        <a class="logo" href="<?php echo base_url(''); ?>"><img src="<?php echo base_url('assets/'); ?>img/logo.png"
+        <a style="top:5%;" class="logo" href="<?php echo base_url(''); ?>"><img width="150" src="<?php echo base_url('web/img/logo.png'); ?>"
                                                                 alt="Bushido"/></a>
 
         <!--
@@ -118,7 +120,7 @@ if ($logado == false):
         <!--Main Menu-->
         <nav class="menu">
             <ul class="main">
-                <li class="has-submenu"><a href="index.html">Home<i class="fa fa-chevron-down"></i></a>
+                <li class="has-submenu"><a href="<?php echo base_url('');?>">Home<i class="fa fa-chevron-down"></i></a>
                     <!--Class "has-submenu" for proper highlighting and dropdown-->
                 </li>
                 <li class="has-submenu"><a href="<?php echo base_url('leiloes-abertos') ?>">Leilões Abertos<i
@@ -129,6 +131,7 @@ if ($logado == false):
                     $dropdown_limit = 10;
 
                     $this->db->from('leiloes');
+                    $get = $this->db->where('data_inicio <=', date('YmdHis'));
                     $get = $this->db->where('status', '1');
                     $get = $this->db->or_where('status', '4');
                     $get = $this->db->get();
@@ -139,6 +142,7 @@ if ($logado == false):
                         <ul class="submenu">
                             <?php
                             $this->db->from('leiloes');
+                            $get = $this->db->where('data_inicio <=', date('YmdHis'));
                             $get = $this->db->where('status', '1');
                             $get = $this->db->or_where('status', '4');
                             $get = $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc');
@@ -156,14 +160,16 @@ if ($logado == false):
                         </ul>
                     <?php endif; ?>
                 </li>
-                <li class="has-submenu"><a href="<?php echo base_url('leiloes-finalizados') ?>">Leilões Finalizados<i
+                <li class="has-submenu"><a href="<?php echo base_url('proximos-leiloes') ?>">Próximos Leilões<i
                             class="fa fa-chevron-down"></i></a>
 
                     <?php
 
 
                     $this->db->from('leiloes');
-                    $get = $this->db->where('status', '3');
+                    $get = $this->db->where('data_inicio >', date('YmdHis'));
+                    $get = $this->db->where('status', '1');
+                    $get = $this->db->or_where('status', '4');
                     $get = $this->db->get();
                     $count = $get->num_rows();
 
@@ -172,6 +178,7 @@ if ($logado == false):
                         <ul class="submenu">
                             <?php
                             $this->db->from('leiloes');
+                            $get = $this->db->where('data_inicio >', date('YmdHis'));
                             $get = $this->db->where('status', '1');
                             $get = $this->db->or_where('status', '4');
                             $get = $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc');
@@ -196,7 +203,7 @@ if ($logado == false):
 
             $this->db->from('categorias');
             $this->db->order_by('acessos', 'desc', 'id_categoria', 'desc');
-            $this->db->limit(5,0);
+            $this->db->limit(5, 0);
             $this->db->where('status', '1');
             $get = $this->db->get();
             $count = $get->num_rows();
@@ -207,54 +214,128 @@ if ($logado == false):
                 <ul class="catalog">
 
                     <?php
-
+                    $replace = array('@', '#', '/', '|', '\'', '(', ')');
                     $result = $get->result_array();
-                    foreach ($result as $value){
-                    ?>
-                    <li class="has-submenu"><a href="shop-filters-left-3cols.html"><?php echo $value['nome'];?><i
-                                class="fa fa-chevron-down"></i></a>
+                    foreach ($result as $value) {
 
-                       <?php
-                       if($value['tipo'] == 1):
-                       ?>
-                        <ul class="submenu">
-                            <li><a href="#">Nokia</a></li>
-                            <li class="has-submenu"><a href="#">iPhone</a>
-                                <!--Class "has-submenu" for adding carret and dropdown-->
-                                <ul class="sub-submenu">
-                                    <li><a href="#">iPhone 4</a></li>
-                                    <li><a href="#">iPhone 4s</a></li>
-                                    <li><a href="#">iPhone 5c</a></li>
-                                    <li><a href="#">iPhone 5s</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">HTC</a></li>
-                            <li class="has-submenu"><a href="#">Samsung</a>
-                                <ul class="sub-submenu">
-                                    <li><a href="#">Galaxy Note 3</a></li>
-                                    <li><a href="#">Galaxy S5</a></li>
-                                    <li><a href="#">Galaxy S3 Neo</a></li>
-                                    <li><a href="#">Galaxy Gear</a></li>
-                                    <li><a href="#">Galaxy S Duos 2</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="#">BlackBerry</a></li>
-                            <li class="offer">
-                                <div class="col-1">
-                                    <p class="p-style2">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-                                        eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                </div>
-                                <div class="col-2">
-                                    <img src="<?php echo base_url('assets/'); ?>img/offers/menu-drodown-offer.jpg"
-                                         alt="Special Offer"/>
-                                    <a class="btn btn-block" href="#"><span>584$</span>Special offer</a>
-                                </div>
-                            </li>
-                        </ul>
 
-                           <?php endif;?>
-                    </li>
-                    <?php   } ?>
+                        ?>
+
+                        <li class="has-submenu"><a
+                                href="<?php echo base_url('categoria/') . str_replace(' ', '-', str_replace($replace, '', strtolower($value['nome']))); ?>"><?php echo $value['nome']; ?>
+                                <i
+                                    class="fa fa-chevron-down"></i></a>
+
+                            <?php
+                            if ($value['tipo'] == 1):
+                                ?>
+                                <?php
+
+                                $this->db->from('subcategorias');
+                                $this->db->where('categoria_id', $value['id_categoria']);
+                                $get = $this->db->get();
+                                $count = $get->num_rows();
+
+                                if ($count > 0):
+                                    ?>
+                                    <ul class="submenu" style="height: 250px;">
+
+                                        <?php
+
+
+                                        $result = $get->result_array();
+
+                                        foreach ($result as $values) {
+                                            ?>
+
+                                            <?php if ($values['tipo'] == 0 or $values['tipo'] <> 1 and $values['tipo'] <> 2): ?>
+                                                <li>
+                                                    <a href="<?php echo base_url('categoria/') . str_replace(' ', '-', str_replace($replace, '', strtolower($value['nome']))) . '/' . str_replace(' ', '-', str_replace($replace, '', strtolower($values['nome']))); ?>"><?php echo $values['nome'] ?></a>
+                                                </li>
+                                            <?php endif; ?>
+
+                                            <?php if ($values['tipo'] == 1): ?>
+                                                <li class="has-submenu"><a
+                                                        href="<?php echo base_url('categoria/') . str_replace(' ', '-', str_replace($replace, '', strtolower($value['nome']))) . '/' . str_replace(' ', '-', str_replace($replace, '', strtolower($values['nome']))); ?>"><?php echo $values['nome'] ?></a>
+                                                    <ul class="sub-submenu">
+
+                                                        <?php
+
+                                                        $subsexplode = explode('<==>', $values['sub-subcategoria']);
+                                                        $countarray = count($subsexplode);
+
+                                                        if ($countarray > 0 and !empty($subsexplode[0])):
+                                                            $subscts = 0;
+                                                            foreach ($subsexplode as $subcategorias) {
+
+                                                                if ($subscts < 5):
+                                                                    ?>
+                                                                    <li>
+                                                                        <a href="<?php echo base_url('categoria/') . str_replace(' ', '-', str_replace($replace, '', strtolower($value['nome']))) . '/' . str_replace(' ', '-', str_replace($replace, '', strtolower($values['nome']))) . '/' . str_replace(' ', '_', str_replace($replace, '', strtolower($subcategorias))); ?>"><?php echo $subcategorias; ?></a>
+                                                                    </li>
+
+                                                                <?php endif;
+                                                                $subscts++;
+                                                            } endif; ?>
+
+                                                    </ul>
+                                                </li>
+                                            <?php endif; ?>
+
+                                            <?php
+                                            $this->db->from('leiloes');
+                                            $this->db->where('categoria', $value['id_categoria']);
+                                            $this->db->where('subcategoria', $values['id_subcategoria']);
+                                            $this->db->order_by('id_leilao', 'rand()', 'acessos', 'desc', 'rate', 'desc');
+                                            $get = $this->db->get();
+                                            $count = $get->num_rows();
+
+                                            if ($count > 0):
+                                                $result = $get->result_array();
+                                                ?>
+                                                <li class="offer">
+                                                    <div class="col-1">
+                                                        <p class="p-style2">
+                                                            <?php
+
+                                                            echo $this->Functions_Model->limitarTexto($result[0]['descricao'], 150);
+
+                                                            ?>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <img src="<?php
+
+                                                            if (empty($result[0]['fotos'])):
+
+                                                                echo base_url('assets/img/noimage.gif');
+                                                            else:
+
+                                                                $explode_ft = explode('(<==>)',$result[0]['fotos']);
+                                                                echo base_url('web/fotos/leiloes/').$explode_ft[0];
+                                                            endif;
+
+                                                            ?>
+                                                         "
+                                                            alt="Special Offer" style="width: 100%;height: 160px;object-fit: cover; object-position: center;"/>
+                                                            <a class="btn btn-block" href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($result[0]['loja'])).'/'.$result[0]['id_leilao'];?>">Participar do Leilão</a>
+                                                    </div>
+                                                </li>
+
+                                                <?php
+                                            endif;
+
+                                        }
+
+                                        ?>
+                                    </ul>
+
+                                    <?php
+                                endif;
+
+                            endif; ?>
+                        </li>
+                    <?php } ?>
                 </ul>
 
             <?php endif; ?>

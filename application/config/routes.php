@@ -56,3 +56,7 @@ $route['home'] = 'Site/index';
 $route['entrar'] = 'Site/cadastro_login';
 $route['CadastroForm'] = 'Ajax/cadastro';
 $route['minha-conta'] = 'Site/minha_conta';
+$route['categoria'] = 'Site/categoria';
+$route['categoria/(.+)'] = 'Site/categoria/$1';
+$route['buscar'] = 'Site/buscar';
+$route['leiloes-abertos'] = 'Site/leiloes_abertos';

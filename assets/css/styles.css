@@ -15527,3 +15527,11 @@ header .search-form .close-search:hover {
   float:left;
   z-index:1000000000000000000;
 }
+
+img {
+
+  object-fit: cover; object-position: center;
+
+
+}
+

@@ -1,12 +1,14 @@
 <?php
 
-if (!isset($_POST['itemid']) and !isset($_POST['nome']) and !isset($_POST['loja']) and !isset($_POST['lojaid']) and !isset($_POST['imagem'])):
+if (!isset($_POST['itemid']) and !isset($_POST['status']) and !isset($_POST['nome']) and !isset($_POST['loja']) and !isset($_POST['lojaid']) and !isset($_POST['imagem'])):
 
     $_POST['itemid'] = $id_leilao;
     $_POST['nome'] = $nome;
+    $_POST['status'] = $status;
     $_POST['loja'] = $loja;
     $_POST['lojaid'] = $id_loja;
     $_POST['imagem'] = $fotos;
+    $_POST['data_terminio'] = $data_terminio;
 
 endif;
 
@@ -25,18 +27,73 @@ endif;
 ?>
 <div class="col-lg-3 col-md-4 col-sm-6">
     <div class="tile">
-        <div class="badges">
-            <span class="sale"></span>
+
+        <div class="price-label" style="<?php if($_POST['status'] == '4'): echo 'background:#3C8B5C;'; endif;?>" id="prizeitem<?php echo $_POST['itemid'];?>">
+
+            <?php
+            if($_POST['status'] == '1'):
+
+            echo '<small>TEMPO LIMITADO</small>';
+           endif;
+
+            if($_POST['status'] == '4'):
+                echo '<small>TEMPO ILIMITADO</small>';
+
+            endif;
+            ?>
+
+
+
         </div>
-        <div class="price-label" id="prizeitem<?php echo $_POST['itemid'];?>">R$ 0,00</div>
-        <a href="#"><img src="<?php echo  $foto; ?>"
+
+        <a href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"><img src="<?php echo  $foto; ?>"
                          alt="<?php echo $_POST['nome']; ?>"/></a>
         <div class="footer">
-            <a href="#">
+            <a href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>">
                 <?php echo $this->Functions_Model->limitarTexto($_POST['nome'], 50) ?>
             </a>
-            <span>por <b
-                    onclick="window.location.href='<?php echo base_url('loja/') . str_replace(' ', '-', strtolower($_POST['loja'])) . '/' . $_POST['lojaid']; ?>'"><?php echo $_POST['nome']; ?></b></span>
+
+            <span>por <b style="cursor: pointer;"
+                    onclick="window.location.href='<?php echo base_url('loja/') . str_replace(' ', '-', strtolower($_POST['loja'])) . '/' . $_POST['lojaid']; ?>'"><?php echo $_POST['loja']; ?></b></span>
+
+            <?php
+
+
+            $data_completa = $_POST['data_terminio'];
+            $data = date('D');
+            $ano = substr($data_completa,0,4);
+            $mes = substr($data_completa,4,2);
+            $dia = substr($data_completa,6,2);
+            $semana = array(
+                'Sun' => 'Domingo',
+                'Mon' => 'Segunda-Feira',
+                'Tue' => 'Terca-Feira',
+                'Wed' => 'Quarta-Feira',
+                'Thu' => 'Quinta-Feira',
+                'Fri' => 'Sexta-Feira',
+                'Sat' => 'Sábado'
+            );
+
+
+
+            $mes_extenso = array(
+                '01' => 'Janeiro',
+                '02' => 'Fevereiro',
+                '03' => 'Marco',
+                '04' => 'Abril',
+                '05' => 'Maio',
+                '06' => 'Junho',
+                '07' => 'Julho',
+                '08' => 'Agosto',
+                '09' => 'Novembro',
+                '10' => 'Setembro',
+                '11' => 'Outubro',
+                '12' => 'Dezembro'
+            );
+
+
+            ?>
+            <span><small><b><i class="icon-calendar"></i> <?php    echo $semana["$data"] . ", {$dia} de " . $mes_extenso["$mes"] . " de {$ano}";?></b></small></span>
             <div class="tools">
                 <?php
 
@@ -81,12 +138,13 @@ endif;
                             <span></span>
 
                         <?php }?>
+
                     </div>
 
                 <?php endif; ?>
 
                 <!--Add To Cart Button-->
-                <a class="add-cart-btn" href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"><span>Participar</span><i class="icon-shopping-cart"></i></a>
+                <a class="add-cart-btn" href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"><span>Participar</span><i class="icon-hammer"></i></a>
                 <!--Share Button-->
                 <div class="share-btn">
                     <div class="hover-state">
