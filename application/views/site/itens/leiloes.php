@@ -66,6 +66,8 @@ endif;
             $ano = substr($data_completa,0,4);
             $mes = substr($data_completa,4,2);
             $dia = substr($data_completa,6,2);
+
+
             $semana = array(
                 'Sun' => 'Domingo',
                 'Mon' => 'Segunda-Feira',

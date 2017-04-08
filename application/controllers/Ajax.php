@@ -153,7 +153,7 @@ class Ajax extends CI_Controller
     public function email($from, $fromname, $to, $toname, $headers, $assunto, $mensagem)
     {
 
-        echo 11;
+        //echo 11;
 
     }
 
@@ -332,14 +332,11 @@ class Ajax extends CI_Controller
 
                                     endif;
 
+                                endif;
                             endif;
-                            endif;
-
 
 
                         else:
-
-
 
 
                             $dadol['cnpj'] = $_POST['cnpj'];
@@ -353,7 +350,7 @@ class Ajax extends CI_Controller
                             $dadol['sexo_funcionario_contato'] = $_POST['nsd'];
                             $insere = $this->db->insert('lojas', $dadol);
 
-                            if($insere):
+                            if ($insere):
 
                                 $this->db->where('id', $_SESSION['ID']);
                                 $dado['id_loja'] = $insere;
@@ -379,28 +376,23 @@ class Ajax extends CI_Controller
                                             $this->email('', '', '', '', '', '', '');
 
 
-
                                         endif;
 
 
-
-
+                                    endif;
                                 endif;
-                                endif;
-                                endif;
-                                endif;
-                                endif;
+                            endif;
+                        endif;
+                    endif;
 
 
+                else:
 
 
-            else:
+                endif;
 
 
             endif;
-
-
-        endif;
         endif;
 
     }
@@ -419,10 +411,226 @@ class Ajax extends CI_Controller
 
     }
 
-    public function janela_lance($leilao)
+    public function ajaxlance()
     {
 
-        echo 'janela lance';
+        if (isset($_POST['leilao_id']) and isset($_POST['valor']) and $this->sessionsverify_model->logver() == true):
+
+            $this->db->from('leiloes');
+            $this->db->where('id_leilao', $_POST['leilao_id']);
+            $getln1 = $this->db->get();
+            $countln1 = $getln1->num_rows();
+
+
+
+            if ($countln1 > 0):
+
+                $resultln1 = $getln1->result_array();
+
+
+                $this->db->from('lances');
+                $this->db->where('id_leilao', $_POST['leilao_id']);
+                $this->db->order_by('id_lance', 'desc', 'valor_lance', 'desc');
+                $this->db->limit(1, 0);
+                $getln = $this->db->get();
+                $countln = $getln->num_rows();
+
+
+
+
+
+                if ($countln <= 0):
+
+                    if(number_format((float)$_POST['valor'],2, '.', '') < number_format((float)$resultln1[0]['lance_inicial'],2, '.', '')):
+
+                        echo 55;
+
+                    else:
+
+                        $dado['id_usuario'] = $_SESSION['ID'];
+                        $dado['id_leilao'] = $_POST['leilao_id'];
+                        $dado['data_lance'] = date('YmdHis');
+                        $dado['valor_lance'] = number_format((float)$_POST['valor'], 2, '.', '');
+                        if ($this->db->insert('lances', $dado)):
+
+
+                            $this->db->from('lances');
+                            $this->db->where('id_leilao', $_POST['leilao_id']);
+                            $this->db->order_by('id_lance', 'desc', 'valor_lance', 'desc');
+                            $get = $this->db->get();
+                            $count = $get->num_rows();
+                            if ($count > 0):
+                                $result = $get->result_array();
+                                foreach ($result as $value) {
+
+                                    $mail = $this->email('', '', '', '', '', '', '');
+                                    if ($mail == 11):
+                                        $dado['id_usuario_to'] = $value['id_usuario'];
+                                        $dado['id_lance'] = $value['id_lance'];
+                                        $dado['data_lance_send'] = date('YmdHis');
+                                        $dado['status'] = 1;
+
+                                    else:
+                                        $dado['id_usuario_to'] = $value['id_usuario'];
+                                        $dado['id_lance'] = $value['id_lance'];
+                                        $dado['data_lance_send'] = date('YmdHis');
+                                        $dado['status'] = 0;
+
+                                    endif;
+
+                                }
+
+                                $dado['mensagem'] = 'Lance Efetuado com Sucesso';
+                                $dado['mensagem2'] = 'Você Recebera um E-mail de Confirmação do seu lance em breve.';
+                                $this->load->view('ajax/sucessomensagem', $dado);
+
+
+                            else:
+
+                                $mail = $this->email('', '', '', '', '', '', '');
+                                $this->load->view('ajax/sucessomensagem', $dado);
+
+                            endif;
+
+
+                        else:
+
+                            //NÃO DEU LANCE, DEU ERRO
+
+                            $this->errorLog('');
+                            $dado['mensagem'] = 'Erro ao dar Lance';
+                            $dado['mensagem2'] = 'Ocorreu um erro ao da seu lance, tente novamente.';
+                            $this->load->view('ajax/erromensagem', $dado);
+
+
+                        endif;
+
+                    endif;
+                else:
+
+                    $this->db->from('lances');
+                    $this->db->where('id_leilao', $_POST['leilao_id']);
+                    $this->db->order_by('id_lance', 'desc', 'valor_lance', 'desc');
+                    $this->db->limit(1, 0);
+                    $getssp = $this->db->get();
+                    $countssp = $getssp->num_rows();
+                    if ($countssp > 0):
+
+                        $resultssp = $getssp->result_array();
+                        $minimo = number_format((float)$resultssp[0]['valor_lance'], 2, '.', '');
+                    else:
+                        $minimo = number_format((float)$resultln1[0]['lance_inicial'], 2, '.', '');
+
+                    endif;
+                    if(number_format((float)$_POST['valor'],2, '.', '') < number_format((float)$minimo,2, '.', '')):
+
+                        echo 55;
+
+                    else:
+
+                        $dado['id_usuario'] = $_SESSION['ID'];
+                        $dado['id_leilao'] = $_POST['leilao_id'];
+                        $dado['data_lance'] = date('YmdHis');
+                        $dado['valor_lance'] = number_format((float)$_POST['valor'], 2, '.', '');
+                        if ($this->db->insert('lances', $dado)):
+
+
+                            $this->db->from('lances');
+                            $this->db->where('id_leilao', $_POST['leilao_id']);
+                            $this->db->order_by('id_lance', 'desc', 'valor_lance', 'desc');
+                            $get = $this->db->get();
+                            $count = $get->num_rows();
+                            if ($count > 0):
+                                $result = $get->result_array();
+                                foreach ($result as $value) {
+
+                                    $mail = $this->email('', '', '', '', '', '', '');
+                                    if ($mail == 11):
+                                        $dado['id_usuario_to'] = $value['id_usuario'];
+                                        $dado['id_lance'] = $value['id_lance'];
+                                        $dado['data_lance_send'] = date('YmdHis');
+                                        $dado['status'] = 1;
+
+                                    else:
+                                        $dado['id_usuario_to'] = $value['id_usuario'];
+                                        $dado['id_lance'] = $value['id_lance'];
+                                        $dado['data_lance_send'] = date('YmdHis');
+                                        $dado['status'] = 0;
+
+                                    endif;
+
+                                }
+
+                                $dado['mensagem'] = 'Lance Efetuado com Sucesso';
+                                $dado['mensagem2'] = 'Você Recebera um E-mail de Confirmação do seu lance em breve.';
+                                $this->load->view('ajax/sucessomensagem', $dado);
+
+
+                            else:
+
+                                if($this->email('', '', '', '', '', '', '') == 11):
+                                    $this->load->view('ajax/sucessomensagem', $dado);
+
+                                else:
+                                    $this->load->view('ajax/sucessomensagem', $dado);
+                                    $this->errorLog('');
+                                endif;
+
+                            endif;
+
+
+                        else:
+
+                            //NÃO DEU LANCE, DEU ERRO
+
+                            $this->errorLog('');
+                            $dado['mensagem'] = 'Erro ao dar Lance';
+                            $dado['mensagem2'] = 'Ocorreu um erro ao da seu lance, tente novamente.';
+                            $this->load->view('ajax/erromensagem', $dado);
+
+
+                        endif;
+
+                    endif;
+
+
+
+
+
+                endif;
+
+
+            else:
+
+                $dado['mensagem'] = 'Erro ao dar Lance';
+                $dado['mensagem2'] = 'Ocorreu um erro ao da seu lance, tente novamente.';
+                $this->load->view('ajax/erromensagem', $dado);
+
+            endif;
+
+
+
+
+
+
+
+        else:
+
+            $dado['mensagem'] = 'Erro ao dar Lance';
+            $dado['mensagem2'] = 'Ocorreu um erro ao da seu lance, tente novamente.';
+            $this->load->view('ajax/erromensagem', $dado);
+
+
+        endif;
+
+
+    }
+
+    public function janela_lance($leilao)
+    {
+        $dados['logado'] = $this->sessionsverify_model->logver();
+        $dados['leilao'] = $leilao;
+        $this->load->view('ajax/lance', $dados);
 
     }
 
@@ -471,6 +679,38 @@ class Ajax extends CI_Controller
 
             endif;
 
+
+        endif;
+
+
+    }
+
+    public function locais()
+    {
+
+
+        if (isset($_POST['key'])):
+
+
+            $this->db->select('nome', 'id');
+            $this->db->from('localidade');
+            $this->db->like('cidade', $_POST['key']);
+            $this->db->or_like('estado', $_POST['key']);
+            $this->db->or_like('uf', $_POST['key']);
+            $this->db->limit(50, 0);
+            $get = $this->db->get();
+            if ($get->num_rows() > 0):
+
+                $result = $get->result_array();
+
+                foreach ($result as $value) {
+                    echo '<li title="' . $value['nome'] . '" style="margin: 0;padding: 1% 1% 1% 0;"><a style="font-size: 12pt;text-align: center;">' . $value['nome'] . '</a></li>';
+                }
+
+
+            else:
+                echo '<b style="padding: 2%;">Nenhum Resultado Encontrado.</b>';
+            endif;
 
         endif;
 

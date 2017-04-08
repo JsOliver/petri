@@ -31,7 +31,7 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
     <section class="catalog-grid">
         <div class="container">
             <h2 class="with-sorting"><?php echo $this->Functions_Model->limitarTexto($result[0]['nome'], 150); ?></h2>
-     
+
 
             <div class="row">
 
@@ -67,6 +67,7 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
                                 <li><a href="#">Air cases (23)</a></li>
                             </ul>
                         </section>
+
                     </div>
                 </div>
                 <?php

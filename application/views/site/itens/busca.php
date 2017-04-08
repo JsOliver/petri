@@ -70,7 +70,7 @@ if ($_POST['tipo'] == '1'):
         }
 
     else:
-        echo '<h1>Nenhuma Categoria Encontrada.</h1>';
+        echo '<h1>Nenhum Leilão Encontrado.</h1>';
 
     endif;
     if($count > 0):

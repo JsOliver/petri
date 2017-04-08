@@ -517,7 +517,7 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
                             <br>
                             <br>
                             <h5 style="text-align: center;">LANCE INICIAL
-                                R$ <?php echo number_format($result[0]['lance_inicial'], 2, ',', '.'); ?></h5>
+                                R$ <?php echo number_format((float)$result[0]['lance_inicial'], 2, ',', '.'); ?></h5>
                             <h5 style="text-align: center;">LANCE ATUAL
                                 R$ <span id="lanceatual"><?php
 
@@ -531,7 +531,7 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
                                     if ($count > 0):
                                         $result = $get->result_array();
 
-                                        echo number_format($result[0]['valor_lance'],2,',','.');
+                                        echo number_format((float)$result[0]['valor_lance'],2,',','.');
 
                                     else:
 
@@ -579,7 +579,10 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
                 </div>
             </div>
         </div>
-    </div>
+
+
+
+
 
 </div>
 

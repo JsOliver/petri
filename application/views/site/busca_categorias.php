@@ -168,9 +168,154 @@
     <?php
     if ($pagina == 'buscar'):
         ?>
+
+
         <section class="catalog-grid">
             <div class="container">
                 <h2>Resultados sobre <b><?php echo ucwords(strip_tags($_GET['q'])); ?></b></h2>
+                <div class="filters-mobile col-lg-3 col-md-3 col-sm-3">
+
+                    <div class="shop-filters">
+
+                        <section class="filter-section">
+
+                            <?php
+                            if(!isset($_GET['sem_fim']) and !isset($_GET['com_fim'])):
+
+                                $semfim = 'checked';
+                                $comfim = 'checked';
+
+                            else:
+                                if(isset($_GET['sem_fim']) and !isset($_GET['com_fim'])):
+                                    $semfim = 'checked';
+                                    $comfim = '';
+
+                                    elseif(!isset($_GET['sem_fim']) and isset($_GET['com_fim'])):
+                                        $semfim = '';
+                                        $comfim = 'checked';
+
+
+                                else:
+                                    $semfim = '';
+                                    $comfim = '';
+
+                                    endif;
+
+                            endif;
+
+                            ?>
+
+                            <h3>Tipo</h3>
+                            <label style="cursor: pointer;">
+                                <div style="position: relative; float:left;cursor: pointer;">
+                                    <input type="checkbox" name="colors" value="white" id="color_1"
+                                           style="position: absolute; opacity: 0;" <?php echo $semfim;?>>
+                                </div>
+                                Leilões com Data Fim</label>
+                            <br>
+                            <label style="cursor: pointer;">
+                                <div style="position: relative; float:left;">
+                                    <input type="checkbox" name="colors" value="white" id="color_1"
+                                           style="position: absolute; opacity: 0;" <?php echo $semfim;?>>
+                                </div>
+                                Leilões sem Data Fim</label>
+                            <br>
+
+                        </section>
+                        <?php
+                        $this->db->from('localidade');
+                        $this->db->order_by('id','desc');
+                        $get = $this->db->get();
+                        $count = $get->num_rows();
+                        if($count > 0):
+                        $result = $get->result_array();
+                        ?>
+                        <section class="filter-section">
+                            <h3>Localidade</h3>
+                            <?php
+                            $arrays = array([
+                                "tipo" => 1,
+                                "result" => $result,
+                            ]);
+                            $this->load->view('site/itens/busca_localidade', $arrays[0]);
+
+                            ?>
+
+                        </section>
+
+                        <?php endif;?>
+
+                        <?php
+                        $limit_ct = 7;
+                        $this->db->select('id_categoria');
+                        $this->db->from('categorias');
+                        $this->db->order_by('id_categoria', 'desc');
+                        $get = $this->db->get();
+                        $count = $get->num_rows();
+                        if ($count > 0):
+                            ?>
+                            <section class="filter-section">
+                                <h3>Categorias</h3>
+                                <ul class="categories">
+
+                                    <?php
+                                    $this->db->from('categorias');
+                                    $this->db->order_by('id_categoria', 'desc');
+                                    $this->db->limit($limit_ct, 0);
+                                    $gets = $this->db->get();
+                                    $result = $gets->result_array();
+                                    foreach ($result as $value) {
+
+                                        $this->db->select('id_leilao');
+                                        $this->db->from('leiloes');
+                                        $this->db->where('categoria', $value['id_categoria']);
+                                        $getccs = $this->db->get();
+                                        $countccs = $getccs->num_rows();
+                                        ?>
+                                        <?php
+
+                                        //Aqui ele conta quantos produtos existem nessa categoria
+
+                                        $this->db->from('subcategorias');
+                                        $this->db->where('categoria_id',$value['id_categoria']);
+                                        $this->db->order_by('id_subcategoria', 'desc');
+                                        $getss = $this->db->get();
+                                        $countss = $getss->num_rows();
+                                        ?>
+                                        <?php
+                                        if ($countss > 0):
+                                            $results = $getss->result_array();
+                                            ?>
+                                            <li class="has-subcategory"><a href="#"><?php echo $value['nome'];?> (<?php echo number_format($countccs);?>)</a>
+                                                <!--Class "has-subcategory" for dropdown propper work-->
+                                                <ul class="subcategory">
+                                                    <?php
+                                                    foreach ($results as $values){
+
+                                                        $this->db->select('subcategoria');
+                                                        $this->db->from('leiloes');
+                                                        $this->db->where('subcategoria', $values['id_subcategoria']);
+                                                        $getccsa = $this->db->get();
+                                                        $countccsa = $getccsa->num_rows();
+                                                    ?>
+                                                    <li><a href="#"><?php echo $values['nome'];?> (<?php echo number_format($countccsa);?>)</a></li>
+                                                   <?php }?>
+                                                </ul>
+                                            </li>
+                                        <?php else: ?>
+
+                                            <li><a href="#"><?php echo $value['nome'];?> (<?php echo number_format($countccs);?>)</a></li>
+                                        <?php endif; ?>
+
+                                    <?php }
+                                    if ($count > $limit_ct): ?>
+                                        <li><a href="<?php echo base_url('categoria'); ?>"><b>Ver Mais</b></a></li>
+                                    <?php endif; ?>
+                                </ul>
+                            </section>
+                        <?php endif; ?>
+                    </div>
+                </div>
                 <div class="row" id="busca_result">
 
                     <?php
@@ -178,11 +323,11 @@
 
                     if (isset($_GET['pag'])):
 
-                        if($_GET['pag'] < 1):
+                        if ($_GET['pag'] < 1):
                             $pag = 1;
 
                         else:
-                                $pag = $_GET['pag'];
+                            $pag = $_GET['pag'];
 
                         endif;
                     else:

@@ -131,6 +131,83 @@ class Site extends CI_Controller
 
     }
 
+    public function meus_lances()
+    {
+        if ($this->SessionsVerify_Model->logver() == true):
+
+            $metas = $this->Functions_Model->metas('cogs');
+            $dados['cogs'] = str_replace("'.base_url('assets/').'", base_url('assets'), str_replace("<?php echo base_url(\'assets/\');?>", base_url('assets/'), $metas[0]));
+            $dados['metas'] = $dados['cogs'];
+            $dados['logado'] = $this->SessionsVerify_Model->logver();
+
+
+            $this->load->view('site/users/meus-lances', $dados);
+
+        else:
+            redirect(base_url('entrar'), 'refresh');
+
+        endif;
+
+    }
+
+    public function historico_leiloes()
+    {
+        if ($this->SessionsVerify_Model->logver() == true):
+
+            $metas = $this->Functions_Model->metas('cogs');
+            $dados['cogs'] = str_replace("'.base_url('assets/').'", base_url('assets'), str_replace("<?php echo base_url(\'assets/\');?>", base_url('assets/'), $metas[0]));
+            $dados['metas'] = $dados['cogs'];
+            $dados['logado'] = $this->SessionsVerify_Model->logver();
+
+
+            $this->load->view('site/users/historico-leiloes', $dados);
+
+        else:
+            redirect(base_url('entrar'), 'refresh');
+
+        endif;
+
+    }
+
+    public function leiloes_arrematados()
+    {
+        if ($this->SessionsVerify_Model->logver() == true):
+
+            $metas = $this->Functions_Model->metas('cogs');
+            $dados['cogs'] = str_replace("'.base_url('assets/').'", base_url('assets'), str_replace("<?php echo base_url(\'assets/\');?>", base_url('assets/'), $metas[0]));
+            $dados['metas'] = $dados['cogs'];
+            $dados['logado'] = $this->SessionsVerify_Model->logver();
+
+
+            $this->load->view('site/users/leiloes-arrematados', $dados);
+
+        else:
+            redirect(base_url('entrar'), 'refresh');
+
+        endif;
+
+    }
+
+
+    public function criar_gerenciar_leiloes()
+    {
+        if ($this->SessionsVerify_Model->logver() == true):
+
+            $metas = $this->Functions_Model->metas('cogs');
+            $dados['cogs'] = str_replace("'.base_url('assets/').'", base_url('assets'), str_replace("<?php echo base_url(\'assets/\');?>", base_url('assets/'), $metas[0]));
+            $dados['metas'] = $dados['cogs'];
+            $dados['logado'] = $this->SessionsVerify_Model->logver();
+
+
+            $this->load->view('site/users/meus-leiloes', $dados);
+
+        else:
+            redirect(base_url('entrar'), 'refresh');
+
+        endif;
+
+    }
+
     public function cadastro_login()
     {
         if ($this->SessionsVerify_Model->logver() == false):
