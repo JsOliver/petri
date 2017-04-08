@@ -7,7 +7,7 @@
     <!--SEO Meta Tags-->
     <meta name="description" content="<?php echo $metas['meta_description']; ?>"/>
     <meta name="keywords"  content="<?php  echo $metas['meta_keywords'];  ?>"/>
-    <meta name="author" content="8Guild"/>
+    <meta name="author" content="<?php  echo $metas['meta_author'];  ?>"/>
     <!--Mobile Specific Meta Tag-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <?php
@@ -47,26 +47,9 @@ if ($logado == false):
                     </div>-->
                 </div>
                 <div class="modal-body">
-                    <form method="post" action="<?php echo base_url('LoginForm'); ?>" id="login-forms">
-                        <div class="form-group group">
-                            <label for="log-email">Email</label>
-                            <input type="email" class="form-control" name="emaill" id="log-email"
-                                   placeholder="Entre com Seu E-mail" required>
-                            <!-- <a class="help-link" href="#">Forgot email?</a>-->
-                        </div>
-                        <div class="form-group group">
-                            <label for="log-password">Senha</label>
-                            <input type="text" class="form-control" name="senhal" id="log-password"
-                                   placeholder="Entre com sua Senha" required>
-                            <a class="help-link" href="#">Esqueceu a Senha?</a>
-                        </div>
-                        <input type="hidden" name="typeLog" value="1">
-
-                        <!--  <div class="checkbox">
-                              <label><input type="checkbox" name="remember"> Lembre-me</label>
-                          </div>-->
-                        <input class="btn btn-success" type="submit" value="Login">
-                    </form>
+                    <?php
+                    $this->load->view('ajax/login');
+                    ?>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -120,7 +103,7 @@ if ($logado == false):
         <!--Main Menu-->
         <nav class="menu">
             <ul class="main">
-                <li class="has-submenu"><a href="<?php echo base_url('');?>">Home<i class="fa fa-chevron-down"></i></a>
+                <li class=""><a href="<?php echo base_url('');?>">Inicio</a>
                     <!--Class "has-submenu" for proper highlighting and dropdown-->
                 </li>
                 <li class="has-submenu"><a href="<?php echo base_url('leiloes-abertos') ?>">Leilões Abertos<i

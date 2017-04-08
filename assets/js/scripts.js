@@ -106,13 +106,9 @@ $(document).ready(function(e) {
 				},
 				success: function( data )
 				{
-
-
-
 					if(data == 11){
 						$('.content-loading').html('');
 						window.location.reload();
-
 
 					}else{
 						$('.content-loading').html('');
@@ -179,23 +175,22 @@ $('#login-forms2').validate({
 	});
 
 
-
 	/*Registration Form Validation
 *******************************************/
-	$('#registr-form').validate({
+
+
+
+
+
+
+	$('#login-forms').validate({
 		rules: {
-			nome: { required: true,  minlength: 2},
-			agread: { required: true},
-			sobrenome: { required: true,  minlength: 2},
-			email: { required: true, email: true },
-			senha: { required: true, minlength: 6}
+			emaill: { required: true, email: true },
+			senhal: { required: true, minlength: 6}
 		},
 		messages: {
-			nome: { required: 'Prencha esse campo', minlength: 'No mínimo 2 caracteres' },
-			agread: { required: 'Concorde com os Termos e Condições do Site.' },
-			sobrenome: { required: 'Prencha esse campo', minlength: 'No mínimo 2 caracteres' },
-			email: { required: 'Informe o seu email', email: 'Ops, informe um email válido' },
-			senha: { required: 'Prencha esse campo', minlength: 'No mínimo 6 caracteres' }
+			emaill: { required: 'Informe o seu email', email: 'Ops, informe um email válido' },
+			senhal: { required: 'Prencha esse campo', minlength: 'No mínimo 6 caracteres' }
 
 
 		},
@@ -204,7 +199,7 @@ $('#login-forms2').validate({
 
 			$.ajax({
 				type: "POST",
-				url: DIR+"Ajax/cadastro",
+				url: DIR+"Ajax/login",
 				data: dados,
 				beforeSend: function(){ $('.content-loading').html(carregando()); },
 				error: function(data){
@@ -214,10 +209,8 @@ $('#login-forms2').validate({
 				},
 				success: function( data )
 				{
-
 					if(data == 11){
 						$('.content-loading').html('');
-
 						window.location.reload();
 
 					}else{
@@ -814,5 +807,33 @@ var gallery = (function( $ ) {
 }( jQuery ));
 
 
+$(document).ready(function(){
 
+    var clickEvent = false;
+    $('#myCarousel').carousel({
+        interval:   4000
+    }).on('click', '.list-group li', function() {
+        clickEvent = true;
+        $('.list-group li').removeClass('active');
+        $(this).addClass('active');
+    }).on('slid.bs.carousel', function(e) {
+        if(!clickEvent) {
+            var count = $('.list-group').children().length -1;
+            var current = $('.list-group li.active');
+            current.removeClass('active').next().addClass('active');
+            var id = parseInt(current.data('slide-to'));
+            if(count == id) {
+                $('.list-group li').first().addClass('active');
+            }
+        }
+        clickEvent = false;
+    });
+});
+
+$(window).load(function() {
+    var boxheight = $('#myCarousel .carousel-inner').innerHeight();
+    var itemlength = $('#myCarousel .item').length;
+    var triggerheight = Math.round(boxheight/itemlength+1);
+    $('#myCarousel .list-group-item').outerHeight(triggerheight);
+});
 /************************************************************************/

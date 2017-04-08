@@ -5,6 +5,44 @@
 
 <div class="page-content">
 
+    <?php
+
+    $this->db->from('carrosel');
+    $this->db->order_by('id_carrosel', 'desc');
+    $this->db->limit(10, 0);
+    $get = $this->db->get();
+    $count = $get->num_rows();
+    if ($count > 0):
+        $result = $get->result_array();
+        ?>
+        <section class="hero-slider">
+            <div class="master-slider" id="hero-slider">
+
+                <?php foreach ($result as $value) { ?>
+                    <div class="ms-slide" data-delay="7">
+                        <div class="overlay"></div>
+                        <img src="<?php echo base_url('web/fotos/carrosel/' . $value['foto']); ?>"
+                             data-src="<?php echo base_url('web/fotos/carrosel/' . $value['foto']); ?>"
+                             alt="<?php echo $value['nome'];?>"/>
+                        <h2 style="width: 456px; left: 110px; top: 110px;" class="light-color ms-layer"
+                            data-effect="top(50,true)" data-duration="700" data-delay="250" data-ease="easeOutQuad">
+                            Nikon
+                            D4S</h2>
+                        <p style="width: 456px; left: 110px; top: 210px;" class="light-color ms-layer"
+                           data-effect="back(500)"
+                           data-duration="700" data-delay="500" data-ease="easeOutQuad">
+                            <?php echo $this->Functions_Model->limitarTexto($value['descricao'], 250); ?>
+                        </p>
+                        <div style="left: 110px; top: 300px;" class="ms-layer button" data-effect="bottom(50,true)"
+                             data-duration="600" data-delay="950" data-ease="easeOutQuad"><a class="btn btn-primary"
+                                                                                             href="<?php echo strip_tags($value['link_botao']); ?>">  <?php echo $value['nome_botao']; ?>
+                            </a></div>
+                    </div>
+                <?php } ?>
+            </div>
+        </section>
+    <?php endif; ?>
+    <!--Hero Slider Close-->
     <!--Categories-->
     <?php
 
@@ -91,7 +129,9 @@
 
                     foreach ($result as $value) {
                         $this->load->view('site/itens/leiloes', $value);
-                    } ?>
+                    }
+
+                    ?>
 
 
                 </div>
@@ -211,26 +251,28 @@
                     if ($value['tipo'] == 1):
                         ?>
                         <!--Item-->
-                        <div class="gallery-item" data-groups='["imagem"]' data-src="<?php echo base_url('web/fotos/depoimentos/').$value['imagem']; ?>">
-                            <a href="<?php echo base_url('web/fotos/depoimentos/').$value['imagem']; ?>">
+                        <div class="gallery-item" data-groups='["imagem"]'
+                             data-src="<?php echo base_url('web/fotos/depoimentos/') . $value['imagem']; ?>">
+                            <a href="<?php echo base_url('web/fotos/depoimentos/') . $value['imagem']; ?>">
                                 <div class="overlay"><span><i class="icon-expand"></i></span></div>
-                                <img src="<?php echo base_url('web/fotos/depoimentos/').$value['imagem']; ?>
-                                 " alt="<?php echo $value['nome'];?>"/>
+                                <img src="<?php echo base_url('web/fotos/depoimentos/') . $value['imagem']; ?>
+                                 " alt="<?php echo $value['nome']; ?>"/>
                             </a>
                         </div>
 
                     <?php endif; ?>
-                   <?php if($value['tipo'] == 2):
+                    <?php if ($value['tipo'] == 2):
                         ?>
                         <!--Item-->
-                    <div class="gallery-item" data-groups='["video"]'
-                         data-src="<?php echo $value['video']; ?>">
-                        <a href="<?php echo $value['video']; ?>">
-                            <div class="overlay"><span><i class="icon-music-play"></i></span></div>
-                            <img src="<?php echo base_url('web/fotos/depoimentos/').$value['imagem']; ?>" alt="<?php echo $value['nome']; ?>"/>
-                        </a>
-                    </div>
-                        <?php endif;?>
+                        <div class="gallery-item" data-groups='["video"]'
+                             data-src="<?php echo $value['video']; ?>">
+                            <a href="<?php echo $value['video']; ?>">
+                                <div class="overlay"><span><i class="icon-music-play"></i></span></div>
+                                <img src="<?php echo base_url('web/fotos/depoimentos/') . $value['imagem']; ?>"
+                                     alt="<?php echo $value['nome']; ?>"/>
+                            </a>
+                        </div>
+                    <?php endif; ?>
 
                     <?php
                 }
@@ -266,8 +308,6 @@
         </section><!--Brands Carousel Close-->
     <?php endif; ?>
 </div><!--Page Content Close-->
-
-
 
 
 <?php

@@ -25,6 +25,7 @@ else:
 endif;
 
 ?>
+
 <div class="col-lg-3 col-md-4 col-sm-6">
     <div class="tile">
 
@@ -50,7 +51,7 @@ endif;
                          alt="<?php echo $_POST['nome']; ?>"/></a>
         <div class="footer">
             <a href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>">
-                <?php echo $this->Functions_Model->limitarTexto($_POST['nome'], 50) ?>
+                <?php echo $this->Functions_Model->limitarTexto($_POST['nome'], 50); ?>
             </a>
 
             <span>por <b style="cursor: pointer;"
@@ -58,6 +59,7 @@ endif;
 
             <?php
 
+            if($_POST['status'] == '1'):
 
             $data_completa = $_POST['data_terminio'];
             $data = date('D');
@@ -94,6 +96,8 @@ endif;
 
             ?>
             <span><small><b><i class="icon-calendar"></i> <?php    echo $semana["$data"] . ", {$dia} de " . $mes_extenso["$mes"] . " de {$ano}";?></b></small></span>
+
+            <?php endif;?>
             <div class="tools">
                 <?php
 
