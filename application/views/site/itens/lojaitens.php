@@ -31,6 +31,8 @@ $limit = 28;
 
 
     $this->db->from('leiloes');
+$this->db->where('status', '1');
+$this->db->or_where('status', '2');
     $this->db->like('id_loja',$_POST['id_loja']);
     $get = $this->db->get();
     $count1 = $get->num_rows();
@@ -54,6 +56,8 @@ $limit = 28;
 
 
     $this->db->from('leiloes');
+$this->db->where('status', '1');
+$this->db->or_where('status', '2');
     $this->db->like('id_loja',$_POST['id_loja']);
     $this->db->order_by('acessos', 'desc', 'id_categoria', 'desc');
     $this->db->limit($limit, $atual);

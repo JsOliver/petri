@@ -55,6 +55,8 @@ if ($_POST['tipo'] == '1'):
 
 
     $this->db->from('leiloes');
+    $this->db->where('status', '1');
+    $this->db->or_where('status', '2');
     $this->db->like('keywords',$_POST['busca']);
     $this->db->order_by('acessos', 'desc', 'id_categoria', 'desc');
     $this->db->limit($limit, $atual);

@@ -126,7 +126,9 @@ if ($_POST['tipo'] == '2'):
 
         $id_cate = $gets->result_array();
     $this->db->from('leiloes');
-    $this->db->where('categoria',$id_cate[0]['id_categoria']);
+        $this->db->where('categoria',$id_cate[0]['id_categoria']);
+        $this->db->where('status', '1');
+        $this->db->or_where('status', '2');
     $get = $this->db->get();
     $count1 = $get->num_rows();
     $total = ceil($count1 / $limit_ict);
@@ -150,6 +152,8 @@ if ($_POST['tipo'] == '2'):
 
     $this->db->from('leiloes');
     $this->db->where('categoria',$id_cate[0]['id_categoria']);
+        $this->db->where('status', '1');
+        $this->db->or_where('status', '2');
     $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc','rate','desc');
     $this->db->limit($limit_ict, $atual);
     $get = $this->db->get();
@@ -215,6 +219,8 @@ if ($_POST['tipo'] == '3'):
         $id_cate = $gets->result_array();
         $this->db->from('leiloes');
         $this->db->where('subcategoria',$id_cate[0]['id_subcategoria']);
+        $this->db->where('status', '1');
+        $this->db->or_where('status', '2');
         $get = $this->db->get();
         $count1 = $get->num_rows();
         $total = ceil($count1 / $limit_ict);
@@ -238,6 +244,8 @@ if ($_POST['tipo'] == '3'):
 
         $this->db->from('leiloes');
         $this->db->where('subcategoria',$id_cate[0]['id_subcategoria']);
+        $this->db->where('status', '1');
+        $this->db->or_where('status', '2');
         $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc','rate','desc');
         $this->db->limit($limit_ict, $atual);
         $get = $this->db->get();
@@ -305,6 +313,8 @@ if ($_POST['tipo'] == '4'):
         $id_cate = $gets->result_array();
         $this->db->from('leiloes');
         $this->db->where('subcategoria',$id_cate[0]['id_subcategoria']);
+        $this->db->where('status', '1');
+        $this->db->or_where('status', '2');
         $this->db->like('sub-subcategoria',str_replace('_',' ',$_POST['sub_subcategoria']));
         $get = $this->db->get();
         $count1 = $get->num_rows();
@@ -329,6 +339,8 @@ if ($_POST['tipo'] == '4'):
 
         $this->db->from('leiloes');
         $this->db->where('subcategoria',$id_cate[0]['id_subcategoria']);
+        $this->db->where('status', '1');
+        $this->db->or_where('status', '2');
         $this->db->like('sub-subcategoria',str_replace('_',' ',$_POST['sub_subcategoria']));
         $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc','rate','desc');
         $this->db->limit($limit_ict, $atual);

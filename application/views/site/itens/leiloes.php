@@ -37,9 +37,13 @@ endif;
             echo '<small>TEMPO LIMITADO</small>';
            endif;
 
-            if($_POST['status'] == '4'):
+            if($_POST['status'] == '2'):
                 echo '<small>TEMPO ILIMITADO</small>';
 
+            endif;
+
+            if($_POST['status'] == '3'):
+                echo '<small>FINALIZADO</small>';
             endif;
             ?>
 
@@ -47,10 +51,21 @@ endif;
 
         </div>
 
-        <a href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"><img src="<?php echo  $foto; ?>"
+        <a
+            <?php if($_POST['status'] <> '3'): ?>
+            href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"
+            <?php endif;?>
+
+        ><img src="<?php echo  $foto; ?>"
+
                          alt="<?php echo $_POST['nome']; ?>"/></a>
         <div class="footer">
-            <a href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>">
+            <a
+                <?php if($_POST['status'] <> '3'): ?>
+
+                href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"
+            <?php endif;?>
+            >
                 <?php echo $this->Functions_Model->limitarTexto($_POST['nome'], 50); ?>
             </a>
 
@@ -148,6 +163,7 @@ endif;
                     </div>
 
                 <?php endif; ?>
+                <?php if($_POST['status'] <> '3'): ?>
 
                 <!--Add To Cart Button-->
                 <a class="add-cart-btn" href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"><span>Participar</span><i class="icon-hammer"></i></a>
@@ -165,6 +181,7 @@ endif;
                     <div class="hover-state">Wishlist</div>
                     <i class="fa fa-plus"></i>
                 </a>-->
+                <?php endif;?>
             </div>
         </div>
     </div>

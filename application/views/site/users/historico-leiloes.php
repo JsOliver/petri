@@ -27,6 +27,44 @@
 
 
                         ?>
+
+                       <?php $limit = 30;
+
+                        $this->db->from('leiloes');
+
+                        $get = $this->db->get();
+                        $count = $get->num_rows();
+
+                        if ($count > 0):
+                        ?>
+                        <!--Catalog Grid-->
+                        <section class="catalog-grid">
+                            <div class="container">
+                                <h2 class="primary-color">Historico de Acesso de Leilões</h2>
+                                <div class="row" id="leiloes">
+
+                                    <?php
+
+
+                                    $this->db->from('leiloes');
+                                    $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc');
+                                    $this->db->limit($limit, 0);
+                                    $get = $this->db->get();
+                                    $count = $get->num_rows();
+                                    $result = $get->result_array();
+
+                                    foreach ($result as $value) {
+                                        $this->load->view('site/itens/leiloes', $value);
+                                    }
+
+                                    ?>
+
+
+                                </div>
+                            </div>
+                        </section>
+
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

@@ -105,7 +105,7 @@
 
     $this->db->from('leiloes');
     $get = $this->db->where('status', '1');
-    $get = $this->db->or_where('status', '4');
+    $get = $this->db->or_where('status', '2');
     $get = $this->db->get();
     $count = $get->num_rows();
 
@@ -120,7 +120,7 @@
                     <?php
                     $this->db->from('leiloes');
                     $this->db->where('status', '1');
-                    $this->db->or_where('status', '4');
+                    $this->db->or_where('status', '2');
                     $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc');
                     $this->db->limit($limit, 0);
                     $get = $this->db->get();
@@ -143,7 +143,7 @@
 
     $this->db->from('leiloes');
     $this->db->where('status', '1');
-    $this->db->or_where('status', '4');
+    $this->db->or_where('status', '2');
     $this->db->get();
     $count = $get->num_rows();
     if ($count > 0):
@@ -197,7 +197,7 @@
                             <?php
 
                             $this->db->from('leiloes');
-                            $this->db->where('status', '4');
+                            $this->db->or_where('status', '2');
                             $this->db->order_by('acessos', 'desc', 'id_leilao', 'desc');
                             $this->db->limit(6, 0);
                             $get = $this->db->get();
