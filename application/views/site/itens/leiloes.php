@@ -13,6 +13,16 @@ if (!isset($_POST['itemid']) and !isset($_POST['status']) and !isset($_POST['nom
 endif;
 
 
+$datafim = $_POST['data_terminio'];
+
+if($datafim <= date('YmdHis') and $_POST['status'] == '1'):
+
+    $data['status'] = 3;
+    $this->db->where('id_leilao',$_POST['itemid']);
+    $this->db->update('leiloes',$data);
+
+else:
+
 if(empty($_POST['imagem'])):
 
     $foto = base_url('assets/img/noimage.gif');
@@ -49,6 +59,7 @@ endif;
 
 
 
+
         </div>
 
         <a
@@ -76,21 +87,24 @@ endif;
 
             if($_POST['status'] == '1'):
 
-            $data_completa = $_POST['data_terminio'];
-            $data = date('D');
-            $ano = substr($data_completa,0,4);
-            $mes = substr($data_completa,4,2);
-            $dia = substr($data_completa,6,2);
 
+
+            $data_completa = $_POST['data_terminio'];
+
+
+                $dia = substr($data_completa,6,2);
+                $ano = substr($data_completa,0,4);
+                $mes = substr($data_completa,4,2);
+                $data = strftime( '%A', strtotime( date( $ano.'-'.$mes.'-'.$dia ) ) );
 
             $semana = array(
-                'Sun' => 'Domingo',
-                'Mon' => 'Segunda-Feira',
-                'Tue' => 'Terca-Feira',
-                'Wed' => 'Quarta-Feira',
-                'Thu' => 'Quinta-Feira',
-                'Fri' => 'Sexta-Feira',
-                'Sat' => 'Sábado'
+                'Sunday' => 'Domingo',
+                'Monday' => 'Segunda-Feira',
+                'Tuesday' => 'Terca-Feira',
+                'Wednesday' => 'Quarta-Feira',
+                'Thursday' => 'Quinta-Feira',
+                'Friday' => 'Sexta-Feira',
+                'Saturday' => 'Sábado'
             );
 
 
@@ -168,11 +182,50 @@ endif;
                 <!--Add To Cart Button-->
                 <a class="add-cart-btn" href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>"><span>Participar</span><i class="icon-hammer"></i></a>
                 <!--Share Button-->
+
+                    <script>
+
+                        function facebookshare(url) {
+
+                            var width = 400;
+                            var height = 250;
+
+                            var left = 99;
+                            var top = 99;
+
+                            window.open('https://www.facebook.com/sharer/sharer.php?u='+url,'janela', 'width='+width+', height='+height+', top='+top+', left='+left+', scrollbars=yes, status=no, toolbar=no, location=no, directories=no, menubar=no, resizable=no, fullscreen=no');
+
+                        }
+
+                        function twitter(twitter) {
+
+                            var width = 400;
+                            var height = 250;
+
+                            var left = 99;
+                            var top = 99;
+
+                            window.open('https://twitter.com/intent/tweet?text='+twitter,'janela', 'width='+width+', height='+height+', top='+top+', left='+left+', scrollbars=yes, status=no, toolbar=no, location=no, directories=no, menubar=no, resizable=no, fullscreen=no');
+
+                        }
+
+                        function plus(plus) {
+
+                            var width = 400;
+                            var height = 250;
+
+                            var left = 99;
+                            var top = 99;
+
+                            window.open('https://plus.google.com/share?url='+plus,'janela', 'width='+width+', height='+height+', top='+top+', left='+left+', scrollbars=yes, status=no, toolbar=no, location=no, directories=no, menubar=no, resizable=no, fullscreen=no');
+
+                        }
+                    </script>
                 <div class="share-btn">
                     <div class="hover-state">
-                        <a class="fa fa-facebook-square" href="#"></a>
-                        <a class="fa fa-twitter-square" href="#"></a>
-                        <a class="fa fa-google-plus-square" href="#"></a>
+                        <a class="fa fa-facebook-square" href="javascript:facebookshare('<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>')"></a>
+                        <a class="fa fa-twitter-square"  href="javascript:twitter('Venham Participar do Leilão de <?php echo $this->Functions_Model->limitarTexto($_POST['nome'], 25);?> no Mosca Branca. <?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>')"></a>
+                        <a class="fa fa-google-plus-square" href="javascript:plus('<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($_POST['loja'])).'/'.$_POST['itemid'];?>')"></a>
                     </div>
                     <i class="fa fa-share"></i>
                 </div>
@@ -186,3 +239,7 @@ endif;
         </div>
     </div>
 </div>
+
+<?php
+endif;
+    ?>

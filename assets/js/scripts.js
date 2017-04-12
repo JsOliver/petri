@@ -229,6 +229,7 @@ $('#login-forms2').validate({
 	});
 
 
+
 	/*Checkout Form Validation
 	*******************************************/
 	$checkoutForm.validate({

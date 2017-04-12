@@ -269,6 +269,7 @@ if ($logado == false):
                                             $this->db->from('leiloes');
                                             $this->db->where('categoria', $value['id_categoria']);
                                             $this->db->where('subcategoria', $values['id_subcategoria']);
+
                                             $this->db->order_by('id_leilao', 'rand()', 'acessos', 'desc', 'rate', 'desc');
                                             $get = $this->db->get();
                                             $count = $get->num_rows();
@@ -301,7 +302,13 @@ if ($logado == false):
                                                             ?>
                                                          "
                                                             alt="Special Offer" style="width: 100%;height: 160px;object-fit: cover; object-position: center;"/>
+                                                          <?php if($result[0]['status'] == 3):?>
+
+                                                              <a class="btn btn-block">Finalizado</a>
+
+                                                <?php else:?>
                                                             <a class="btn btn-block" href="<?php echo base_url('leilao/'). str_replace(' ', '-', strtolower($result[0]['loja'])).'/'.$result[0]['id_leilao'];?>">Participar do Leilão</a>
+                                                <?php endif;?>
                                                     </div>
                                                 </li>
 

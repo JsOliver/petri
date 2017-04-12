@@ -9,9 +9,20 @@ if ($count < 0):
     redirect(base_url(''));
 endif;
 $result = $get->result_array();
+$statuslei = $result[0]['status'];
 
 //Data Fim do Leilão
 $data_completa = $result[0]['data_terminio'];
+
+
+if ($data_completa <= date('YmdHis') and $result[0]['status'] == '1'):
+
+    $data['status'] = 3;
+    $this->db->where('id_leilao', $this->uri->segment(3));
+    $this->db->update('leiloes', $data);
+echo '<script>window.Location.reload();</script>';
+
+else:
 $ano = substr($data_completa, 0, 4);
 $mes = substr($data_completa, 4, 2);
 $dia = substr($data_completa, 6, 2);
@@ -36,13 +47,12 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
 
         $.ajax({
             type: "POST",
-            url: DIR+"lance_janela",
-            data: {leilao_id:'<?php echo $this->uri->segment(3);?>'},
-            error: function(data){
+            url: DIR + "lance_janela",
+            data: {leilao_id: '<?php echo $this->uri->segment(3);?>'},
+            error: function (data) {
                 $("#lancemodal").html('<h1 style="text-align: center;">Erro</h1>');
             },
-            success: function(data)
-            {
+            success: function (data) {
                 $("#lancemodal").html(data);
 
             }
@@ -54,19 +64,18 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
 <script>
 
 
-    var intervalo = window.setInterval(function() {
+    var intervalo = window.setInterval(function () {
 
 
         $.ajax({
             type: "POST",
-            url: DIR+"ajaxvalor",
-            data: {leilao_id:'<?php echo $this->uri->segment(3);?>'},
-            error: function(data){
+            url: DIR + "ajaxvalor",
+            data: {leilao_id: '<?php echo $this->uri->segment(3);?>'},
+            error: function (data) {
                 $("#lanceatual").text(data);
                 $("#lancemobile").text(data);
             },
-            success: function(data)
-            {
+            success: function (data) {
                 $("#lanceatual").text(data);
                 $("#lancemobile").text(data);
 
@@ -110,10 +119,9 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
     var MI = <?php echo $min;?>;
     var SS = <?php echo $seg;?>;
 
-    function atualizaContador()
-    {
+    function atualizaContador() {
         var hoje = new Date();
-        var futuro = new Date(YY,MM-1,DD,HH,MI,SS);
+        var futuro = new Date(YY, MM - 1, DD, HH, MI, SS);
         var ss = parseInt((futuro - hoje) / 1000);
         var mm = parseInt(ss / 60);
         var hh = parseInt(mm / 60);
@@ -122,25 +130,23 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
         mm = mm - (hh * 60);
         hh = hh - (dd * 24);
         var faltam = '';
-        faltam += (dd && dd > 1) ? dd+' dias, ' : (dd==1 ? '1 dia, ' : '');
-        faltam += (toString(hh).length) ? hh+' hr, ' : '';
-        faltam += (toString(mm).length) ? mm+' min e ' : '';
-        faltam += ss+' seg';
+        faltam += (dd && dd > 1) ? dd + ' dias, ' : (dd == 1 ? '1 dia, ' : '');
+        faltam += (toString(hh).length) ? hh + ' hr, ' : '';
+        faltam += (toString(mm).length) ? mm + ' min e ' : '';
+        faltam += ss + ' seg';
 
-        if (dd+hh+mm+ss > 0)
-        {
-            document.getElementById('contador').innerHTML = '<b style="color: #6d2322;">Encerra em:</b><br> '+faltam;
-            setTimeout(atualizaContador,1000);
+        if (dd + hh + mm + ss > 0) {
+            document.getElementById('contador').innerHTML = '<b style="color: #6d2322;">Encerra em:</b><br> ' + faltam;
+            setTimeout(atualizaContador, 1000);
         }
-        else
-        {
-            document.getElementById('contador').innerHTML = 'CHEGOU!!!!';
-            setTimeout(atualizaContador,1000);
+        else {
+            document.getElementById('contador').innerHTML = 'LEILÃO FINALIZADO!!!';
+            setTimeout(atualizaContador, 1000);
         }
     }
 </script>
 <script>
-    window.onload = function(){
+    window.onload = function () {
         atualizaContador();
         lancemodal();
     }
@@ -306,7 +312,7 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
                                 if ($count > 0):
                                     $resultsa = $getsa->result_array();
 
-                                    echo number_format($resultsa[0]['valor_lance'],2,',','.');
+                                    echo number_format($resultsa[0]['valor_lance'], 2, ',', '.');
 
                                 else:
 
@@ -314,7 +320,23 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
 
                                 endif;
                                 ?></span></h3>
-                        <h6 style="width: 100%;"><a style="width: 100%;" data-toggle="modal" data-target="#<?php if($logado == true): echo 'lance'; else: echo 'loginModal'; endif; ?>" class="btn" onclick="lancemodal();">DE SEU LANCE</a></h6>
+                        <h6 style="width: 100%;">
+
+                            <?php
+
+                            if($result[0]['status'] == '3'):
+                            ?>
+                                <a style="width: 100%;" data-toggle="modal"
+                                    class="btn"
+                                   onclick="lancemodal();">LEILÃO FINALIZADO</a>
+
+                            <?php else:?>
+                                <a style="width: 100%;" data-toggle="modal"
+                                   data-target="#<?php if ($logado == true): echo 'lance';
+                                   else: echo 'loginModal'; endif; ?>" class="btn"
+                                   onclick="lancemodal();">DE SEU LANCE</a>
+                            <?php endif;?>
+                           </h6>
                     </div>
 
                     <div>
@@ -352,41 +374,42 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
 
                                             $minch = 250;
 
-                                            if(strlen($result[0]['descricao']) > $minch):
+                                            if (strlen($result[0]['descricao']) > $minch):
                                                 echo $this->Functions_Model->limitarTexto(strip_tags($result[0]['descricao']), $minch);
 
-                                                else:
-                                                    echo $this->Functions_Model->limitarTexto($result[0]['descricao'], $minch);
+                                            else:
+                                                echo $this->Functions_Model->limitarTexto($result[0]['descricao'], $minch);
 
                                             endif;
                                             ?>
                                         </div>
                                         <?php
-                                        if(strlen($result[0]['descricao']) > $minch):
-                                        ?>
-                                        <div class="collapse" id="vermaisdescricao">
-
-                                            <?php
-
-                                            echo $result[0]['descricao'];
-
+                                        if (strlen($result[0]['descricao']) > $minch):
                                             ?>
+                                            <div class="collapse" id="vermaisdescricao">
 
-                                        </div>
-                                        <?php endif;?>
+                                                <?php
 
-                                                    <?php
-                                                    if(strlen($result[0]['descricao']) > $minch):
-                                                    ?>
-                                        <h1 style="text-align: center;font-size: 15pt;"><a
-                                                style="text-decoration: none;color: darkred;font-weight: bold;"
-                                                id="inout" onclick="sets('vermaisdescricaos');" data-toggle="collapse"
-                                                href="#vermaisdescricao" aria-expanded="false"
-                                                aria-controls="vermaisdescricao">
-                                                Ver Mais
-                                            </a></h1>
+                                                echo $result[0]['descricao'];
 
-                                        <?php endif;?>
+                                                ?>
+
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php
+                                        if (strlen($result[0]['descricao']) > $minch):
+                                            ?>
+                                            <h1 style="text-align: center;font-size: 15pt;"><a
+                                                    style="text-decoration: none;color: darkred;font-weight: bold;"
+                                                    id="inout" onclick="sets('vermaisdescricaos');"
+                                                    data-toggle="collapse"
+                                                    href="#vermaisdescricao" aria-expanded="false"
+                                                    aria-controls="vermaisdescricao">
+                                                    Ver Mais
+                                                </a></h1>
+
+                                        <?php endif; ?>
 
 
                                     </div>
@@ -481,16 +504,17 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
 
                             if ($result[0]['status'] == '1'):
 
-                                $data = date('D');
+
+                                $data = strftime('%A', strtotime(date($ano . '-' . $mes . '-' . $dia)));
 
                                 $semana = array(
-                                    'Sun' => 'Domingo',
-                                    'Mon' => 'Seg',
-                                    'Tue' => 'Ter',
-                                    'Wed' => 'Qua',
-                                    'Thu' => 'Qui',
-                                    'Fri' => 'Sex',
-                                    'Sat' => 'Sab'
+                                    'Sunday' => 'Dom',
+                                    'Monday' => 'Seg',
+                                    'Tuesday' => 'Ter',
+                                    'Wednesday' => 'Qua',
+                                    'Thursday' => 'Qui',
+                                    'Friday' => 'Sex',
+                                    'Saturday' => 'Sab'
                                 );
 
 
@@ -531,31 +555,41 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
                                     if ($count > 0):
                                         $result = $get->result_array();
 
-                                        echo number_format((float)$result[0]['valor_lance'],2,',','.');
+                                        echo number_format((float)$result[0]['valor_lance'], 2, ',', '.');
 
                                     else:
 
                                         echo '0,00';
 
                                     endif;
- ?></span></h5>
-                            <h6 style="text-align: center;"><a data-toggle="modal" data-target="#<?php if($logado == true): echo 'lance'; else: echo 'loginModal'; endif; ?>" class="btn"
-                                                               style="text-align: center;" onclick="lancemodal();">DE SEU LANCE</a></h6>
+                                    ?></span></h5>
+                            <h6 style="text-align: center;">
 
+                                <?php
 
+                                if($statuslei == '3'):
+                                    ?>
+                                    <a style="width: 100%;" data-toggle="modal"
+                                       class="btn"
+                                       onclick="lancemodal();">LEILÃO FINALIZADO</a>
+
+                                <?php else:?>
+                                    <a style="width: 100%;" data-toggle="modal"
+                                       data-target="#<?php if ($logado == true): echo 'lance';
+                                       else: echo 'loginModal'; endif; ?>" class="btn"
+                                       onclick="lancemodal();">DE SEU LANCE</a>
+                                <?php endif;?>
 
 
 
                             <h4 style="text-align: center;">
 
-                            <i style="font-size: 30pt;" class="icon-clock"></i><br>
-                              <p id="contador" style="font-size: 11pt;">Encerra em </p>
+                                <i style="font-size: 30pt;" class="icon-clock"></i><br>
+                                <p id="contador" style="font-size: 11pt;">Encerra em </p>
 
 
-
-</h4>
+                            </h4>
                         </section>
-
 
 
                     </div>
@@ -581,9 +615,9 @@ $replace = array('@', '#', '/', '|', '\'', '(', ')');
         </div>
 
 
+    </div>
 
-
-
-</div>
-
-<?php $this->load->view('site/fixed_files/footer'); ?>
+    <?php
+    $this->load->view('site/fixed_files/footer');
+    endif;
+    ?>
